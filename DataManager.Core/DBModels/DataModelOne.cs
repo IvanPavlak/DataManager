@@ -3,7 +3,8 @@ namespace DataManager.Core.DBModels;
 
 public class DataModelOne : Entity
 {
-    public string Exit { get; set; }
+    public int ExitId { get; set; }
+    public virtual Exit Exit { get; set; }
     public string Port { get; set; }
     public string UserGroup { get; set; }
     public string Country { get; set; }
