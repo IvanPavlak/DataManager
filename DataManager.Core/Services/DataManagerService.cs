@@ -61,7 +61,7 @@ public class DataManagerService
 
     private void ImportExits(List<Exit> exits, Dictionary<string, Exit> exitByName)
     {
-        var exitValidator = new ExitValidator([.. _dbContext.Exits]);
+        var exitValidator = new ExitValidator();
 
         foreach (var exit in exits)
         {
