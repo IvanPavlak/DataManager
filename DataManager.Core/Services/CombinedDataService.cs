@@ -1,7 +1,4 @@
-﻿using DataManager.Core.DBModels;
-using MetForecasting.BDM.Core;
-
-namespace DataManager.Core.Services;
+﻿namespace DataManager.Core.Services;
 
 public class CombinedData
 {

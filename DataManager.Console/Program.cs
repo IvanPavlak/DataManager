@@ -1,13 +1,13 @@
 ﻿using DataManager.Console;
 using DataManager.Core;
-using MetForecasting.BDM.Core;
+using DataManager.Core.Services;
 using Spectre.Console;
 
 using (var dbContext = new DataManagerDbContext())
 {
     var dataManagerService = new DataManagerService(dbContext);
 
-    PrettifyConsole.Title("MetForecastingBDM");
+    PrettifyConsole.Title("DataManagerDB");
 
     AnsiConsole.MarkupLine($"[bold red]-> DELETING EXISTING DATABASE! FOR TESTING ONLY! <-[/]");
     dbContext.Database.EnsureDeleted();

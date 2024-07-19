@@ -2,10 +2,9 @@
 using ClosedXML.Excel;
 using System.Globalization;
 using DataManager.Core.DBModels;
-using DataManager.Core;
 using DataManager.Core.DbValidation;
 
-namespace MetForecasting.BDM.Core;
+namespace DataManager.Core.Services;
 
 public class DataModelTwoService
 {
@@ -84,7 +83,7 @@ public class DataModelTwoService
         }
     }
 
-    public static void ImportDataModelTwos (DataManagerDbContext dbContext, List<DataModelTwo> dataModelTwos, Dictionary<string, Exit> exitByName)
+    public static void ImportDataModelTwos(DataManagerDbContext dbContext, List<DataModelTwo> dataModelTwos, Dictionary<string, Exit> exitByName)
     {
         var dataModelTwoValidator = new DataModelTwoValidator();
 

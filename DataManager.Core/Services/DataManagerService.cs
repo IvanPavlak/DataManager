@@ -5,10 +5,8 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using DataManager.Core.DBModels;
 using DataManager.Core.DbValidation;
-using DataManager.Core;
-using DataManager.Core.Services;
 
-namespace MetForecasting.BDM.Core;
+namespace DataManager.Core.Services;
 
 public class DataManagerService
 {
@@ -164,15 +162,15 @@ public class DataManagerService
                     }
                     else
                     {
-                        if (value != null && (value is int v))
+                        if (value != null && value is int v)
                         {
                             worksheet.Cell(i + 2, j + 1).SetValue(v);
                         }
-                        else if (value != null && (value is double v1))
+                        else if (value != null && value is double v1)
                         {
                             worksheet.Cell(i + 2, j + 1).SetValue(v1);
                         }
-                        else if (value != null && (value is decimal v2))
+                        else if (value != null && value is decimal v2)
                         {
                             worksheet.Cell(i + 2, j + 1).SetValue(v2);
                         }
