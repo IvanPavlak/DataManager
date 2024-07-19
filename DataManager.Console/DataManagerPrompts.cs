@@ -1,9 +1,8 @@
 using DataManager.Core;
 using DataManager.Core.Services;
-using MetForecasting.BDM.Core;
 using Spectre.Console;
 using System.Globalization;
-using static MetForecasting.BDM.Core.DataManagerService;
+using static DataManager.Core.Services.DataManagerService;
 
 namespace DataManager.Console;
 

@@ -7,9 +7,6 @@ public class DataModelOneValidator : AbstractValidator<DataModelOne>
 {
     public DataModelOneValidator()
     {
-        RuleFor(d => d.ExitId)
-            .NotEmpty();
-
         RuleFor(d => d.Exit)
             .NotEmpty();
 

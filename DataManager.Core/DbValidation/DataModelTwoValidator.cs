@@ -7,9 +7,6 @@ public class DataModelTwoValidator : AbstractValidator<DataModelTwo>
 {
     public DataModelTwoValidator()
     {
-        RuleFor(d => d.ExitId)
-            .NotEmpty();
-
         RuleFor(d => d.PeriodStartDate)
             .NotEmpty()
 
