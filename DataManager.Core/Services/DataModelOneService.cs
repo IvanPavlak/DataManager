@@ -3,11 +3,10 @@ using Spectre.Console;
 using System.Globalization;
 using CsvHelper.Configuration;
 using DataManager.Core.DBModels;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DataManager.Core;
 using DataManager.Core.DbValidation;
 using FluentValidation;
-namespace MetForecasting.BDM.Core;
+
+namespace DataManager.Core.Services;
 
 public class DataModelOneService
 {
