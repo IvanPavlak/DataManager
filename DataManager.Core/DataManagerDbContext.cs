@@ -15,9 +15,9 @@ public class DataManagerDbContext : DbContext
 
     }
 
-    public DbSet<DataModelOne> DataModelOnes { get; set; }
-    public DbSet<DataModelTwo> DataModelTwos { get; set; }
-    public DbSet<Exit> Exits { get; set; }
+    public virtual DbSet<DataModelOne> DataModelOnes { get; set; }
+    public virtual DbSet<DataModelTwo> DataModelTwos { get; set; }
+    public virtual DbSet<Exit> Exits { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
