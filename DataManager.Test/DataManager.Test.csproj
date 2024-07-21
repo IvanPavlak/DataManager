@@ -28,4 +28,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataManager.Core\DataManager.Core.csproj" />
+  </ItemGroup>
+
 </Project>
