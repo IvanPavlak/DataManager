@@ -113,7 +113,7 @@ public class DataManagerPrompts
         else if (dataType == DataType.CombinedData)
         {
             DataManagerDisplayData.DisplayCombinedData(dbContext, dateFrom, dateTo, exitId);
-            ExportDataPrompt(CombinedData.FetchCombinedData(dbContext, dateFrom, dateTo, exitId));
+            ExportDataPrompt(CombinedDataService.FetchCombinedData(dbContext, dateFrom, dateTo, exitId));
         }
     }
 
