@@ -132,7 +132,7 @@ public class DataManagerDisplayData
         DataModelTwoDataTable(dataModelTwos, context);
     }
 
-    private static void CombinedDataTable(List<CombinedData> combinedData, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
+    private static void CombinedDataTable(List<CombinedDataService> combinedData, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
     {
         AnsiConsole.Clear(); // By commenting this line, table pages are rendered below each other
         PrettifyConsole.Title("Combined Data", "up");
@@ -184,7 +184,7 @@ public class DataManagerDisplayData
 
     public static void DisplayCombinedData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
-        var combinedData = CombinedData.FetchCombinedData(context, dateFrom, dateTo, exitId);
+        var combinedData = CombinedDataService.FetchCombinedData(context, dateFrom, dateTo, exitId);
         CombinedDataTable(combinedData, context);
     }
 }

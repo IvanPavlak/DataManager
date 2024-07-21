@@ -1,6 +1,6 @@
 ﻿namespace DataManager.Core.Services;
 
-public class CombinedData
+public class CombinedDataService
 {
     public DateOnly Date { get; set; }
     public int ExitId { get; set; }
@@ -9,7 +9,7 @@ public class CombinedData
     public double TotalDataModelTwo { get; set; }
     public double Ratio { get; set; }
 
-    public static List<CombinedData> FetchCombinedData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
+    public static List<CombinedDataService> FetchCombinedData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
         var dataModelOneData = DataModelOneService.FetchDataModelOneData(context, dateFrom, dateTo, exitId).ToList();
         var dataModelTwoData = DataModelTwoService.FetchDataModelTwoData(context, dateFrom, dateTo, exitId).ToList();
@@ -19,7 +19,7 @@ public class CombinedData
             .GroupBy(f => new { f.PeriodStartDate, f.ExitId })
             .ToDictionary(g => g.Key, g => g.First());
 
-        var combinedData = new List<CombinedData>();
+        var combinedData = new List<CombinedDataService>();
 
         foreach (var dataModelOne in dataModelOneData)
         {
@@ -34,7 +34,7 @@ public class CombinedData
                 double ratio = totalDataModelTwo != 0 ? totalDataModelOne / totalDataModelTwo * 100 : 0;
                 ratio = double.IsNaN(ratio) || double.IsInfinity(ratio) ? 0 : ratio;
 
-                var combinedItem = new CombinedData
+                var combinedItem = new CombinedDataService
                 {
                     Date = dataModelOne.Date,
                     ExitId = dataModelOne.ExitId,
