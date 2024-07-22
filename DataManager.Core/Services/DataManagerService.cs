@@ -17,14 +17,7 @@ public class DataManagerService
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
-    public enum DataType
-    {
-        ModelOne,
-        ModelTwo,
-        CombinedData
-    }
-
-    public void ImportToDatabase(string filePath, DataType dataType)
+    public void ImportToDatabase(string filePath, DataTypes dataType)
     {
         _dbContext.Database.Migrate();
 
@@ -34,12 +27,12 @@ public class DataManagerService
 
         switch (dataType)
         {
-            case DataType.ModelOne:
+            case DataTypes.ModelOne:
                 var ModelOnes = ModelOneService.ParseCsv(filePath);
                 ImportExits(ModelOnes.Select(a => a.Exit).ToList(), exitByName);
                 ModelOneService.ImportModelOnes(_dbContext, ModelOnes, exitByName);
                 break;
-            case DataType.ModelTwo:
+            case DataTypes.ModelTwo:
                 var ModelTwos = ModelTwoService.ParseXlsx(filePath);
                 ImportExits(ModelTwos.Select(f => f.Exit).ToList(), exitByName);
                 ModelTwoService.ImportModelTwos(_dbContext, ModelTwos, exitByName);

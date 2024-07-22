@@ -22,9 +22,9 @@ public class DataManagerPrompts
         {
             AnsiConsole.MarkupLine("[bold green1]=> Importing data![/]");
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-            DataManagerService.ImportToDatabase(csvFilePath, DataType.ModelOne);
+            DataManagerService.ImportToDatabase(csvFilePath, DataTypes.ModelOne);
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-            DataManagerService.ImportToDatabase(xlsxFilePath, DataType.ModelTwo);
+            DataManagerService.ImportToDatabase(xlsxFilePath, DataTypes.ModelTwo);
             PrettifyConsole.Title("Database Overview", "Up");
             DataManagerService.DatabaseOverview();
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
@@ -86,13 +86,13 @@ public class DataManagerPrompts
             switch (choice)
             {
                 case "[bold green1]ModelOne Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.ModelOne);
+                    HandleUserInputAndProcessData(dbContext, DataTypes.ModelOne);
                     break;
                 case "[bold green1]ModelTwo Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.ModelTwo);
+                    HandleUserInputAndProcessData(dbContext, DataTypes.ModelTwo);
                     break;
                 case "[bold green1]Combined Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.CombinedData);
+                    HandleUserInputAndProcessData(dbContext, DataTypes.CombinedData);
                     break;
                 default:
                     AnsiConsole.MarkupLine("[bold red]=> Data fetch canceled![/]");
@@ -115,23 +115,23 @@ public class DataManagerPrompts
         }
     }
 
-    private static void HandleUserInputAndProcessData(DataManagerDbContext dbContext, DataType dataType)
+    private static void HandleUserInputAndProcessData(DataManagerDbContext dbContext, DataTypes dataType)
     {
         var dateFrom = PromptForDate("dateFrom");
         var dateTo = PromptForDate("dateTo");
         int exitId = PromptForExit(dbContext);
 
-        if (dataType == DataType.ModelOne)
+        if (dataType == DataTypes.ModelOne)
         {
             DataManagerDisplay.DisplayModelOneData(dbContext, dateFrom, dateTo, exitId);
             ExportDataPrompt(ModelOneService.FetchModelOneData(dbContext, dateFrom, dateTo, exitId));
         }
-        else if (dataType == DataType.ModelTwo)
+        else if (dataType == DataTypes.ModelTwo)
         {
             DataManagerDisplay.DisplayModelTwoData(dbContext, dateFrom, dateTo, exitId);
             ExportDataPrompt(ModelTwoService.FetchModelTwoData(dbContext, dateFrom, dateTo, exitId));
         }
-        else if (dataType == DataType.CombinedData)
+        else if (dataType == DataTypes.CombinedData)
         {
             DataManagerDisplay.DisplayCombinedData(dbContext, dateFrom, dateTo, exitId);
             ExportDataPrompt(CombinedDataService.FetchCombinedData(dbContext, dateFrom, dateTo, exitId));

@@ -1,7 +1,7 @@
+using Spectre.Console;
 using DataManager.Core;
 using DataManager.Core.DBModels;
 using DataManager.Core.Services;
-using Spectre.Console;
 
 namespace DataManager.Console;
 
