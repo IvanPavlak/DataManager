@@ -95,7 +95,6 @@ public class PrettifyConsole
                 else if (choice == "e")
                 {
                     AnsiConsole.MarkupLine($"\n[bold red]=> Exiting![/]");
-                    CreateAndDisplayLine("dodgerblue1");
                     exitLoop = true;
                 }
             }
