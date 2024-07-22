@@ -1,12 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+namespace DataManager.WebApi.OpenAPI;
 
-namespace DataManager.WebApi.OpenAPI
+public static class SwaggerExtensions
 {
-    public class SwaggerExtensions
+    public static IApplicationBuilder UseDataManagerSwagger(this WebApplication app)
     {
-        
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                foreach (var description in app.DescribeApiVersions())
+                {
+                    var url = $"/swagger/{description.GroupName}/swagger.json";
+                    var name = description.GroupName.ToUpperInvariant();
+                    options.SwaggerEndpoint(url, name);
+                }
+            });
+        }
+
+        return app;
     }
 }
