@@ -22,9 +22,9 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                 description.GroupName,
                 new OpenApiInfo()
                 {
-                    Title = $"MetForecasting.BDM.WebAPI {description.ApiVersion}",
+                    Title = $"DataManager.WebAPI {description.ApiVersion}",
                     Version = description.ApiVersion.ToString(),
-                    Description = "MetForecasting.BDM.WebAPI"
+                    Description = "DataManger.WebAPI"
                 });
         }
 
