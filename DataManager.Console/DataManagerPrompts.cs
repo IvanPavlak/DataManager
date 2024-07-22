@@ -8,9 +8,10 @@ namespace DataManager.Console;
 
 public class DataManagerPrompts
 {
-
     public static void ConsoleAppStartPrompt(DataManagerService DataManagerService, string csvFilePath, string xlsxFilePath, DataManagerDbContext dbContext)
     {
+        EraseExistingDatabasePrompt(dbContext);
+
         var importChoice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[bold dodgerblue1]=> Do you want to import data?[/]")
@@ -36,6 +37,26 @@ public class DataManagerPrompts
             DataManagerService.DatabaseOverview();
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
             FetchDataPrompt(dbContext);
+        }
+    }
+
+    public static void EraseExistingDatabasePrompt(DataManagerDbContext dbContext)
+    {
+        var importChoice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("[bold dodgerblue1]=> Do you want to erase the existing database?[/]")
+                .PageSize(3)
+                .AddChoices("[bold green1]Yes[/]", "[bold red]No[/]"));
+
+        if (importChoice == "[bold green1]Yes[/]")
+        {
+            AnsiConsole.MarkupLine($"[bold red]=> DELETED EXISTING DATABASE![/]");
+            PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
+            dbContext.Database.EnsureDeleted();
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -190,6 +211,8 @@ public class DataManagerPrompts
 
     public static void ExportDataPrompt<T>(List<T> data)
     {
+        PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
+
         var exportChoice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("[bold dodgerblue1]=> Do you want to export this data?[/]")
