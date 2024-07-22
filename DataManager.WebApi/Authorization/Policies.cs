@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+namespace DataManager.WebApi.Authorization;
 
-namespace DataManager.WebApi.Authorization
+public class Policies
 {
-    public class Policies
-    {
-        
-    }
+    public const string ReadAccess = "read_access";
+    public const string WriteAccess = "write_access";
 }
