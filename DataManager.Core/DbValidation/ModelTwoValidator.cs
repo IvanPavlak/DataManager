@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DataManager.Core.DbValidation;
 
-public class DataModelTwoValidator : AbstractValidator<DataModelTwo>
+public class ModelTwoValidator : AbstractValidator<ModelTwo>
 {
-    public DataModelTwoValidator()
+    public ModelTwoValidator()
     {
         RuleFor(d => d.PeriodStartDate)
             .NotEmpty()

@@ -2,7 +2,7 @@ using DataManager.Core.DBModels;
 
 namespace DataManager.WebApi.Repositories;
 
-public class InMemDataModelOneRepository : IDataModelOnesRepository
+public class InMemModelOneRepository : IModelOnesRepository
 {
     static List<Exit> exits =
     [
@@ -11,7 +11,7 @@ public class InMemDataModelOneRepository : IDataModelOnesRepository
         new() { Id = 3, Name = "Exit3" }
     ];
 
-    List<DataModelOne> DataModelOnes =
+    List<ModelOne> modelOnes =
     [
         new() {
             Id = 1,
@@ -57,54 +57,54 @@ public class InMemDataModelOneRepository : IDataModelOnesRepository
         }
     ];
 
-    public async Task<IEnumerable<DataModelOne>> GetAllDataModelOnesAsync(int pageNumber, int pageSize, string filter)
+    public async Task<IEnumerable<ModelOne>> GetAllModelOnesAsync(int pageNumber, int pageSize, string filter)
     {
         var skipCount = (pageNumber - 1) * pageSize;
 
-        return await Task.FromResult(FilterDataModelOnes(filter).Skip(skipCount).Take(pageSize));
+        return await Task.FromResult(FilterModelOnes(filter).Skip(skipCount).Take(pageSize));
     }
 
-    public async Task<DataModelOne> GetDataModelOneAsync(int id)
+    public async Task<ModelOne> GetModelOneAsync(int id)
     {
-        return await Task.FromResult(DataModelOnes.Find(DataModelOne => DataModelOne.Id == id));
+        return await Task.FromResult(modelOnes.Find(ModelOne => ModelOne.Id == id));
     }
 
-    public async Task CreateDataModelOneAsync(DataModelOne DataModelOne)
+    public async Task CreateModelOneAsync(ModelOne ModelOne)
     {
-        DataModelOne.Id = DataModelOnes.Max(DataModelOne => DataModelOne.Id) + 1;
-        DataModelOnes.Add(DataModelOne);
+        ModelOne.Id = modelOnes.Max(ModelOne => ModelOne.Id) + 1;
+        modelOnes.Add(ModelOne);
 
         await Task.CompletedTask;
     }
 
-    public async Task UpdateDataModelOneAsync(DataModelOne updatedDataModelOne)
+    public async Task UpdateModelOneAsync(ModelOne updatedModelOne)
     {
-        var index = DataModelOnes.FindIndex(DataModelOne => DataModelOne.Id == updatedDataModelOne.Id);
-        DataModelOnes[index] = updatedDataModelOne;
+        var index = modelOnes.FindIndex(ModelOne => ModelOne.Id == updatedModelOne.Id);
+        modelOnes[index] = updatedModelOne;
 
         await Task.CompletedTask;
     }
 
-    public async Task DeleteDataModelOneAsync(int id)
+    public async Task DeleteModelOneAsync(int id)
     {
-        var index = DataModelOnes.FindIndex(DataModelOne => DataModelOne.Id == id);
-        DataModelOnes.RemoveAt(index);
+        var index = modelOnes.FindIndex(ModelOne => ModelOne.Id == id);
+        modelOnes.RemoveAt(index);
 
         await Task.CompletedTask;
     }
 
-    public async Task<int> CountDataModelOneAsync(string filter)
+    public async Task<int> CountModelOneAsync(string filter)
     {
-        return await Task.FromResult(FilterDataModelOnes(filter).Count());
+        return await Task.FromResult(FilterModelOnes(filter).Count());
     }
 
-    private IEnumerable<DataModelOne> FilterDataModelOnes(string filter)
+    private IEnumerable<ModelOne> FilterModelOnes(string filter)
     {
         if (string.IsNullOrEmpty(filter))
         {
-            return DataModelOnes;
+            return modelOnes;
         }
 
-        return DataModelOnes.Where(DataModelOne => DataModelOne.Country.Contains(filter));
+        return modelOnes.Where(ModelOne => ModelOne.Country.Contains(filter));
     }
 }

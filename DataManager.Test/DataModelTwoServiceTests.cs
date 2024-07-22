@@ -1,12 +1,12 @@
 using Moq;
 using ClosedXML.Excel;
-using DataManager.Core.Services;
 using DataManager.Core;
+using DataManager.Core.Services;
 using DataManager.Core.DBModels;
 
 namespace DataManager.Test;
 
-public class DataModelTwoServiceTests
+public class ModelTwoServiceTests
 {
     private enum TestDataScenario
     {
@@ -68,32 +68,32 @@ public class DataModelTwoServiceTests
     }
 
     [Fact]
-    public void ParseXlsx_DataParsedCorrectly_ReturnsDataModelTwoList()
+    public void ParseXlsx_DataParsedCorrectly_ReturnsModelTwoList()
     {
         // Arrange
         // File location: ...\DataManager.Test\bin\Debug\net8.0
-        string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ValidDataModelTwoTestData.xlsx");
+        string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ValidModelTwoTestData.xlsx");
         CreateTestXlsxData(testFilePath, TestDataScenario.ValidData);
 
         // Act
-        var dataModelTwos = DataModelTwoService.ParseXlsx(testFilePath);
+        var modelTwos = ModelTwoService.ParseXlsx(testFilePath);
 
         // Assert
-        Assert.NotNull(dataModelTwos);
-        Assert.NotEmpty(dataModelTwos);
-        Assert.Equal(2, dataModelTwos.Count); // Check if the correct number of dataModelTwos are read
+        Assert.NotNull(modelTwos);
+        Assert.NotEmpty(modelTwos);
+        Assert.Equal(2, modelTwos.Count); // Check if the correct number of ModelTwos are read
 
-        // Check if the data of the first dataModelTwo is read correctly
-        Assert.Equal(new DateOnly(2024, 01, 01), dataModelTwos[0].PeriodStartDate);
-        Assert.Equal("Exit1", dataModelTwos[0].Exit.Name);
-        Assert.Equal(100, dataModelTwos[0].GainAmountThree);
-        Assert.Equal(new DateTime(2024, 01, 01, 12, 0, 0), dataModelTwos[0].PeriodEndDate);
+        // Check if the data of the first ModelTwo is read correctly
+        Assert.Equal(new DateOnly(2024, 01, 01), modelTwos[0].PeriodStartDate);
+        Assert.Equal("Exit1", modelTwos[0].Exit.Name);
+        Assert.Equal(100, modelTwos[0].GainAmountThree);
+        Assert.Equal(new DateTime(2024, 01, 01, 12, 0, 0), modelTwos[0].PeriodEndDate);
 
-        // Check if the data of the second dataModelTwo is read correctly
-        Assert.Equal(new DateOnly(2024, 01, 02), dataModelTwos[1].PeriodStartDate);
-        Assert.Equal("Exit2", dataModelTwos[1].Exit.Name);
-        Assert.Equal(150, dataModelTwos[1].GainAmountThree);
-        Assert.Equal(new DateTime(2024, 01, 02, 12, 0, 0), dataModelTwos[1].PeriodEndDate);
+        // Check if the data of the second ModelTwo is read correctly
+        Assert.Equal(new DateOnly(2024, 01, 02), modelTwos[1].PeriodStartDate);
+        Assert.Equal("Exit2", modelTwos[1].Exit.Name);
+        Assert.Equal(150, modelTwos[1].GainAmountThree);
+        Assert.Equal(new DateTime(2024, 01, 02, 12, 0, 0), modelTwos[1].PeriodEndDate);
 
         // Clean up test file
         File.Delete(testFilePath);
@@ -103,15 +103,15 @@ public class DataModelTwoServiceTests
     public void ParseXlsx_InvalidDateData_ReturnsEmptyList()
     {
         // Arrange
-        string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidDateDataModelTwoTestData.xlsx");
+        string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidModelTwoTestData.xlsx");
         CreateTestXlsxData(testFilePath, TestDataScenario.InvalidDate);
 
         // Act
-        var dataModelTwos = DataModelTwoService.ParseXlsx(testFilePath);
+        var modelTwos = ModelTwoService.ParseXlsx(testFilePath);
 
         // Assert
-        Assert.NotNull(dataModelTwos);
-        Assert.Empty(dataModelTwos); // Expecting an empty list due to invalid data
+        Assert.NotNull(modelTwos);
+        Assert.Empty(modelTwos); // Expecting an empty list due to invalid data
 
         // Clean up test file
         File.Delete(testFilePath);
@@ -121,22 +121,22 @@ public class DataModelTwoServiceTests
     public void ParseXlsx_InvalidDataModelTwoData_ReturnsEmptyList()
     {
         // Arrange
-        string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidDataModelTwoTestData.xlsx");
+        string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidModelTwoTestData.xlsx");
         CreateTestXlsxData(testFilePath, TestDataScenario.InvalidGainAmountThree);
 
         // Act
-        var dataModelTwos = DataModelTwoService.ParseXlsx(testFilePath);
+        var modelTwos = ModelTwoService.ParseXlsx(testFilePath);
 
         // Assert
-        Assert.NotNull(dataModelTwos);
-        Assert.Empty(dataModelTwos); // Expecting an empty list due to invalid data
+        Assert.NotNull(modelTwos);
+        Assert.Empty(modelTwos); // Expecting an empty list due to invalid data
 
         // Clean up test file
         File.Delete(testFilePath);
     }
 
     [Fact]
-    public void FetchDataModelTwoData_NoFilters_ReturnsAllDataModelTwosOrderedByDate()
+    public void FetchModelTwoData_NoFilters_ReturnsAllModelTwosOrderedByDate()
     {
         // Arrange
         var contextMock = new Mock<DataManagerDbContext>();
@@ -144,26 +144,26 @@ public class DataModelTwoServiceTests
         var dateTo = new DateOnly(2024, 6, 1);
         var exitId = default(int); // No filter on exitId
 
-        var dataModelTwoData = new List<DataModelTwo>
+        var modelTwoData = new List<ModelTwo>
     {
         new() { PeriodStartDate = new DateOnly(2024, 1, 5), ExitId = 1 },
         new() { PeriodStartDate = new DateOnly(2024, 2, 10), ExitId = 2 },
     };
 
-        // Mocking the dataModelTwos DbSet in the context
-        var mockDataModelTwos = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
-        contextMock.Setup(c => c.DataModelTwos).Returns(mockDataModelTwos.Object);
+        // Mocking the ModelTwos DbSet in the context
+        var mockDataModelTwos = MockDbSetHelper.CreateMockDbSet(modelTwoData);
+        contextMock.Setup(c => c.ModelTwos).Returns(mockDataModelTwos.Object);
 
         // Act
-        var result = DataModelTwoService.FetchDataModelTwoData(contextMock.Object, dateFrom, dateTo, exitId);
+        var result = ModelTwoService.FetchModelTwoData(contextMock.Object, dateFrom, dateTo, exitId);
 
         // Assert
-        // Verify that the result contains all dataModelTwos within the date range, ordered by date
-        Assert.Equal(dataModelTwoData.OrderBy(f => f.PeriodStartDate), result);
+        // Verify that the result contains all ModelTwos within the date range, ordered by date
+        Assert.Equal(modelTwoData.OrderBy(f => f.PeriodStartDate), result);
     }
 
     [Fact]
-    public void FetchDataModelTwoData_DateRangeFilter_ReturnsDataModelTwosWithinRangeOrderedByDate()
+    public void FetchModelTwoData_DateRangeFilter_ReturnsModelTwosWithinRangeOrderedByDate()
     {
         // Arrange
         var contextMock = new Mock<DataManagerDbContext>();
@@ -171,26 +171,26 @@ public class DataModelTwoServiceTests
         var dateTo = new DateOnly(2024, 6, 1);
         var exitId = default(int); // No filter on exitId
 
-        var dataModelTwoData = new List<DataModelTwo>
+        var modelTwoData = new List<ModelTwo>
     {
         new() { PeriodStartDate = new DateOnly(2024, 1, 5), ExitId = 1 },
         new() { PeriodStartDate = new DateOnly(2024, 2, 10), ExitId = 2 },
     };
 
-        // Mocking the dataModelTwos DbSet in the context
-        var mockDataModelTwos = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
-        contextMock.Setup(c => c.DataModelTwos).Returns(mockDataModelTwos.Object);
+        // Mocking the ModelTwos DbSet in the context
+        var mockDataModelTwos = MockDbSetHelper.CreateMockDbSet(modelTwoData);
+        contextMock.Setup(c => c.ModelTwos).Returns(mockDataModelTwos.Object);
 
         // Act
-        var result = DataModelTwoService.FetchDataModelTwoData(contextMock.Object, dateFrom, dateTo, exitId);
+        var result = ModelTwoService.FetchModelTwoData(contextMock.Object, dateFrom, dateTo, exitId);
 
         // Assert
-        // Verify that the result contains all dataModelTwos within the date range, ordered by date
-        Assert.Equal(dataModelTwoData.Where(f => f.PeriodStartDate >= dateFrom && f.PeriodStartDate <= dateTo).OrderBy(f => f.PeriodStartDate), result);
+        // Verify that the result contains all ModelTwos within the date range, ordered by date
+        Assert.Equal(modelTwoData.Where(f => f.PeriodStartDate >= dateFrom && f.PeriodStartDate <= dateTo).OrderBy(f => f.PeriodStartDate), result);
     }
 
     [Fact]
-    public void FetchDataModelTwoData_ExitIdFilter_ReturnsDataModelTwosForSpecificExitOrderedByExitIdThenDate()
+    public void FetchModelTwoData_ExitIdFilter_ReturnsModelTwosForSpecificExitOrderedByExitIdThenDate()
     {
         // Arrange
         var contextMock = new Mock<DataManagerDbContext>();
@@ -198,21 +198,21 @@ public class DataModelTwoServiceTests
         var dateTo = default(DateOnly);
         var exitId = 1; // Example exit ID
 
-        var dataModelTwoData = new List<DataModelTwo>
+        var modelTwoData = new List<ModelTwo>
     {
         new() { PeriodStartDate = new DateOnly(2024, 1, 5), ExitId = 1 },
         new() { PeriodStartDate = new DateOnly(2024, 2, 10), ExitId = 1 },
     };
 
-        // Mocking the dataModelTwos DbSet in the context
-        var mockDataModelTwos = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
-        contextMock.Setup(c => c.DataModelTwos).Returns(mockDataModelTwos.Object);
+        // Mocking the ModelTwos DbSet in the context
+        var mockDataModelTwos = MockDbSetHelper.CreateMockDbSet(modelTwoData);
+        contextMock.Setup(c => c.ModelTwos).Returns(mockDataModelTwos.Object);
 
         // Act
-        var result = DataModelTwoService.FetchDataModelTwoData(contextMock.Object, dateFrom, dateTo, exitId);
+        var result = ModelTwoService.FetchModelTwoData(contextMock.Object, dateFrom, dateTo, exitId);
 
         // Assert
-        // Verify that the result contains dataModelTwos only for the specified exit ID, ordered by exit ID then date
-        Assert.Equal(dataModelTwoData.Where(f => f.ExitId == exitId).OrderBy(f => f.ExitId).ThenBy(f => f.PeriodStartDate), result);
+        // Verify that the result contains ModelTwos only for the specified exit ID, ordered by exit ID then date
+        Assert.Equal(modelTwoData.Where(f => f.ExitId == exitId).OrderBy(f => f.ExitId).ThenBy(f => f.PeriodStartDate), result);
     }
 }

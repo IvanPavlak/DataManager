@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataManager.WebApi.Repositories;
 
-public class EntityFrameworkRepository : IDataModelOnesRepository, IDataModelTwosRepository
+public class EntityFrameworkRepository : IModelOnesRepository, IModelTwosRepository
 {
     private readonly DataManagerDbContext dbContext;
 
@@ -16,92 +16,92 @@ public class EntityFrameworkRepository : IDataModelOnesRepository, IDataModelTwo
         this.logger = logger;
     }
 
-    public async Task<IEnumerable<DataModelOne>> GetAllDataModelOnesAsync(int pageNumber, int pageSize, string filter)
+    public async Task<IEnumerable<ModelOne>> GetAllModelOnesAsync(int pageNumber, int pageSize, string filter)
     {
         var skipCount = (pageNumber - 1) * pageSize;
 
-        return await FilterDataModelOnes(filter)
-                    .OrderBy(dataModelOne => dataModelOne.Id)
+        return await FilterModelOnes(filter)
+                    .OrderBy(ModelOne => ModelOne.Id)
                     .Skip(skipCount)
                     .Take(pageSize)
                     .AsNoTracking().ToListAsync();
     }
 
-    public async Task<IEnumerable<DataModelTwo>> GetAllDataModelTwosAsync(int pageNumber, int pageSize, string filter)
+    public async Task<IEnumerable<ModelTwo>> GetAllModelTwosAsync(int pageNumber, int pageSize, string filter)
     {
         var skipCount = (pageNumber - 1) * pageSize;
 
-        return await dbContext.DataModelTwos
-                              .OrderBy(dataModelTwo => dataModelTwo.Id)
+        return await dbContext.ModelTwos
+                              .OrderBy(ModelTwo => ModelTwo.Id)
                               .Skip(skipCount)
                               .Take(pageSize)
                               .AsNoTracking().ToListAsync();
     }
 
-    public async Task<DataModelOne> GetDataModelOneAsync(int id)
+    public async Task<ModelOne> GetModelOneAsync(int id)
     {
-        return await dbContext.DataModelOnes.FindAsync(id);
+        return await dbContext.ModelOnes.FindAsync(id);
     }
 
-    public async Task<DataModelTwo> GetDataModelTwoAsync(int id)
+    public async Task<ModelTwo> GetModelTwoAsync(int id)
     {
-        return await dbContext.DataModelTwos.FindAsync(id);
+        return await dbContext.ModelTwos.FindAsync(id);
     }
 
-    public async Task CreateDataModelOneAsync(DataModelOne dataModelOne)
+    public async Task CreateModelOneAsync(ModelOne ModelOne)
     {
-        dbContext.DataModelOnes.Add(dataModelOne);
+        dbContext.ModelOnes.Add(ModelOne);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task CreateDataModelTwoAsync(DataModelTwo dataModelTwo)
+    public async Task CreateModelTwoAsync(ModelTwo ModelTwo)
     {
-        dbContext.DataModelTwos.Add(dataModelTwo);
+        dbContext.ModelTwos.Add(ModelTwo);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateDataModelOneAsync(DataModelOne updatedDataModelOne)
+    public async Task UpdateModelOneAsync(ModelOne updatedModelOne)
     {
-        dbContext.DataModelOnes.Update(updatedDataModelOne);
+        dbContext.ModelOnes.Update(updatedModelOne);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateDataModelTwoAsync(DataModelTwo updatedDataModelTwo)
+    public async Task UpdateModelTwoAsync(ModelTwo updatedModelTwo)
     {
-        dbContext.DataModelTwos.Update(updatedDataModelTwo);
+        dbContext.ModelTwos.Update(updatedModelTwo);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteDataModelOneAsync(int id)
+    public async Task DeleteModelOneAsync(int id)
     {
-        await dbContext.DataModelOnes.Where(dataModelOne => dataModelOne.Id == id)
+        await dbContext.ModelOnes.Where(ModelOne => ModelOne.Id == id)
                        .ExecuteDeleteAsync();
     }
 
-    public async Task DeleteDataModelTwoAsync(int id)
+    public async Task DeleteModelTwoAsync(int id)
     {
-        await dbContext.DataModelTwos.Where(dataModelTwo => dataModelTwo.Id == id)
+        await dbContext.ModelTwos.Where(ModelTwo => ModelTwo.Id == id)
                        .ExecuteDeleteAsync();
     }
 
-    public async Task<int> CountDataModelOneAsync(string filter)
+    public async Task<int> CountModelOneAsync(string filter)
     {
-        return await FilterDataModelOnes(filter).CountAsync();
+        return await FilterModelOnes(filter).CountAsync();
     }
 
-    public async Task<int> CountDataModelTwoAsync()
+    public async Task<int> CountModelTwoAsync()
     {
-        return await dbContext.DataModelTwos.CountAsync();
+        return await dbContext.ModelTwos.CountAsync();
     }
 
-    private IQueryable<DataModelOne> FilterDataModelOnes(string filter)
+    private IQueryable<ModelOne> FilterModelOnes(string filter)
     {
         if (string.IsNullOrEmpty(filter))
         {
-            return dbContext.DataModelOnes;
+            return dbContext.ModelOnes;
         }
 
-        return dbContext.DataModelOnes
-                        .Where(DataModelOne => DataModelOne.Country.Contains(filter)); 
+        return dbContext.ModelOnes
+                        .Where(ModelOne => ModelOne.Country.Contains(filter));
     }
 }

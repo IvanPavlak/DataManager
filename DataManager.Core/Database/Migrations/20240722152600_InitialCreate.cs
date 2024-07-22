@@ -26,7 +26,7 @@ namespace DataManager.Core.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DataModelOnes",
+                name: "ModelOnes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -44,9 +44,9 @@ namespace DataManager.Core.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DataModelOnes", x => x.Id);
+                    table.PrimaryKey("PK_ModelOnes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DataModelOnes_Exits_ExitId",
+                        name: "FK_ModelOnes_Exits_ExitId",
                         column: x => x.ExitId,
                         principalTable: "Exits",
                         principalColumn: "Id",
@@ -54,7 +54,7 @@ namespace DataManager.Core.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DataModelTwos",
+                name: "ModelTwos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -66,9 +66,9 @@ namespace DataManager.Core.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DataModelTwos", x => x.Id);
+                    table.PrimaryKey("PK_ModelTwos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DataModelTwos_Exits_ExitId",
+                        name: "FK_ModelTwos_Exits_ExitId",
                         column: x => x.ExitId,
                         principalTable: "Exits",
                         principalColumn: "Id",
@@ -76,13 +76,13 @@ namespace DataManager.Core.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DataModelOnes_ExitId",
-                table: "DataModelOnes",
+                name: "IX_ModelOnes_ExitId",
+                table: "ModelOnes",
                 column: "ExitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DataModelTwos_ExitId",
-                table: "DataModelTwos",
+                name: "IX_ModelTwos_ExitId",
+                table: "ModelTwos",
                 column: "ExitId");
         }
 
@@ -90,10 +90,10 @@ namespace DataManager.Core.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DataModelOnes");
+                name: "ModelOnes");
 
             migrationBuilder.DropTable(
-                name: "DataModelTwos");
+                name: "ModelTwos");
 
             migrationBuilder.DropTable(
                 name: "Exits");

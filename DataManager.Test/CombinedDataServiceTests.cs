@@ -15,13 +15,13 @@ public class CombinedDataServiceTests
         var dateTo = new DateOnly(2023, 12, 31);
         var exitId = 1;
 
-        var dataModelOneData = new List<DataModelOne>
+        var modelOneData = new List<ModelOne>
             {
                 new() { Date = new DateOnly(2023, 6, 1), ExitId = 1, Total = 100 },
                 new() { Date = new DateOnly(2023, 6, 2), ExitId = 1, Total = 200 }
             };
 
-        var dataModelTwoData = new List<DataModelTwo>
+        var modelTwoData = new List<ModelTwo>
             {
                 new() { PeriodStartDate = new DateOnly(2023, 6, 1), ExitId = 1, GainAmountThree = 150 },
                 new() { PeriodStartDate = new DateOnly(2023, 6, 2), ExitId = 1, GainAmountThree = 250 }
@@ -34,12 +34,12 @@ public class CombinedDataServiceTests
 
         var mockContext = new Mock<DataManagerDbContext>();
 
-        var mockDataModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-        var mockDataModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
+        var mockModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(modelOneData);
+        var mockModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(modelTwoData);
         var mockExitsDbSet = MockDbSetHelper.CreateMockDbSet(exits);
 
-        mockContext.Setup(c => c.DataModelOnes).Returns(mockDataModelOnesDbSet.Object);
-        mockContext.Setup(c => c.DataModelTwos).Returns(mockDataModelTwosDbSet.Object);
+        mockContext.Setup(c => c.ModelOnes).Returns(mockModelOnesDbSet.Object);
+        mockContext.Setup(c => c.ModelTwos).Returns(mockModelTwosDbSet.Object);
         mockContext.Setup(c => c.Exits).Returns(mockExitsDbSet.Object);
 
         // Act
@@ -51,22 +51,22 @@ public class CombinedDataServiceTests
         Assert.Equal(new DateOnly(2023, 6, 1), result[0].Date);
         Assert.Equal(1, result[0].ExitId);
         Assert.Equal("Exit 1", result[0].ExitName);
-        Assert.Equal(100, result[0].TotalDataModelOne);
-        Assert.Equal(150, result[0].TotalDataModelTwo);
+        Assert.Equal(100, result[0].TotalModelOne);
+        Assert.Equal(150, result[0].TotalModelTwo);
         Assert.Equal(66.67, result[0].Ratio, 2); // Using tolerance for floating point comparison
     }
 
     [Fact]
-    public void FetchCombinedData_NoMatchingDataModelTwoData_ReturnsEmptyList()
+    public void FetchCombinedData_NoMatchingModelTwoData_ReturnsEmptyList()
     {
         // Arrange
         var dateFrom = new DateOnly(2023, 1, 1);
         var dateTo = new DateOnly(2023, 12, 31);
         var exitId = 1;
 
-        var dataModelTwoData = new List<DataModelTwo>(); // No matching dataModelTwo data
+        var modelTwoData = new List<ModelTwo>(); // No matching ModelTwo data
 
-        var dataModelOneData = new List<DataModelOne>
+        var modelOneData = new List<ModelOne>
         {
             new() { Date = new DateOnly(2023, 6, 1), ExitId = 1, Total = 100 }
         };
@@ -78,12 +78,12 @@ public class CombinedDataServiceTests
 
         var mockContext = new Mock<DataManagerDbContext>();
 
-        var mockDataModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-        var mockDataModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
+        var mockModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(modelOneData);
+        var mockModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(modelTwoData);
         var mockExitsDbSet = MockDbSetHelper.CreateMockDbSet(exits);
 
-        mockContext.Setup(c => c.DataModelOnes).Returns(mockDataModelOnesDbSet.Object);
-        mockContext.Setup(c => c.DataModelTwos).Returns(mockDataModelTwosDbSet.Object);
+        mockContext.Setup(c => c.ModelOnes).Returns(mockModelOnesDbSet.Object);
+        mockContext.Setup(c => c.ModelTwos).Returns(mockModelTwosDbSet.Object);
         mockContext.Setup(c => c.Exits).Returns(mockExitsDbSet.Object);
 
         // Act
@@ -94,16 +94,16 @@ public class CombinedDataServiceTests
     }
 
     [Fact]
-    public void FetchCombinedData_NoMatchingDataModelOneData_ReturnsEmptyList()
+    public void FetchCombinedData_NoMatchingModelOneData_ReturnsEmptyList()
     {
         // Arrange
         var dateFrom = new DateOnly(2023, 1, 1);
         var dateTo = new DateOnly(2023, 12, 31);
         var exitId = 1;
 
-        var dataModelOneData = new List<DataModelOne>(); // No matching dataModelOne data
+        var modelOneData = new List<ModelOne>(); // No matching ModelOne data
 
-        var dataModelTwoData = new List<DataModelTwo>
+        var modelTwoData = new List<ModelTwo>
         {
             new() { PeriodStartDate = new DateOnly(2023, 6, 1), ExitId = 1, GainAmountThree = 150 }
         };
@@ -114,12 +114,12 @@ public class CombinedDataServiceTests
 
         var mockContext = new Mock<DataManagerDbContext>();
 
-        var mockDataModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-        var mockDataModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
+        var mockModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(modelOneData);
+        var mockModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(modelTwoData);
         var mockExitsDbSet = MockDbSetHelper.CreateMockDbSet(exits);
 
-        mockContext.Setup(c => c.DataModelOnes).Returns(mockDataModelOnesDbSet.Object);
-        mockContext.Setup(c => c.DataModelTwos).Returns(mockDataModelTwosDbSet.Object);
+        mockContext.Setup(c => c.ModelOnes).Returns(mockModelOnesDbSet.Object);
+        mockContext.Setup(c => c.ModelTwos).Returns(mockModelTwosDbSet.Object);
         mockContext.Setup(c => c.Exits).Returns(mockExitsDbSet.Object);
 
         // Act
@@ -139,24 +139,24 @@ public class CombinedDataServiceTests
 
         var exits = new List<Exit>(); // No matching exit name
 
-        var dataModelOneData = new List<DataModelOne>
+        var modelOneData = new List<ModelOne>
             {
                 new() { Date = new DateOnly(2023, 6, 1), ExitId = 1, Total = 100 }
             };
 
-        var dataModelTwoData = new List<DataModelTwo>
+        var modelTwoData = new List<ModelTwo>
             {
                 new() { PeriodStartDate = new DateOnly(2023, 6, 1), ExitId = 1, GainAmountThree = 150 }
             };
 
         var mockContext = new Mock<DataManagerDbContext>();
 
-        var mockDataModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-        var mockDataModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
+        var mockModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(modelOneData);
+        var mockModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(modelTwoData);
         var mockExitsDbSet = MockDbSetHelper.CreateMockDbSet(exits);
 
-        mockContext.Setup(c => c.DataModelOnes).Returns(mockDataModelOnesDbSet.Object);
-        mockContext.Setup(c => c.DataModelTwos).Returns(mockDataModelTwosDbSet.Object);
+        mockContext.Setup(c => c.ModelOnes).Returns(mockModelOnesDbSet.Object);
+        mockContext.Setup(c => c.ModelTwos).Returns(mockModelTwosDbSet.Object);
         mockContext.Setup(c => c.Exits).Returns(mockExitsDbSet.Object);
 
         // Act
@@ -168,8 +168,8 @@ public class CombinedDataServiceTests
         Assert.Equal(new DateOnly(2023, 6, 1), result[0].Date);
         Assert.Equal(1, result[0].ExitId);
         Assert.Equal("Unknown", result[0].ExitName);
-        Assert.Equal(100, result[0].TotalDataModelOne);
-        Assert.Equal(150, result[0].TotalDataModelTwo);
+        Assert.Equal(100, result[0].TotalModelOne);
+        Assert.Equal(150, result[0].TotalModelTwo);
         Assert.Equal(66.67, result[0].Ratio, 2);
     }
 
@@ -181,18 +181,18 @@ public class CombinedDataServiceTests
         var dateTo = new DateOnly(2023, 12, 31);
         var exitId = 1;
 
-        var dataModelOneData = new List<DataModelOne>(); // Empty data
-        var dataModelTwoData = new List<DataModelTwo>(); // Empty data
+        var modelOneData = new List<ModelOne>(); // Empty data
+        var modelTwoData = new List<ModelTwo>(); // Empty data
         var exits = new List<Exit>(); // Empty data
 
         var mockContext = new Mock<DataManagerDbContext>();
 
-        var mockDataModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-        var mockDataModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(dataModelTwoData);
+        var mockModelOnesDbSet = MockDbSetHelper.CreateMockDbSet(modelOneData);
+        var mockModelTwosDbSet = MockDbSetHelper.CreateMockDbSet(modelTwoData);
         var mockExitsDbSet = MockDbSetHelper.CreateMockDbSet(exits);
 
-        mockContext.Setup(c => c.DataModelOnes).Returns(mockDataModelOnesDbSet.Object);
-        mockContext.Setup(c => c.DataModelTwos).Returns(mockDataModelTwosDbSet.Object);
+        mockContext.Setup(c => c.ModelOnes).Returns(mockModelOnesDbSet.Object);
+        mockContext.Setup(c => c.ModelTwos).Returns(mockModelTwosDbSet.Object);
         mockContext.Setup(c => c.Exits).Returns(mockExitsDbSet.Object);
 
         // Act

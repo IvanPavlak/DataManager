@@ -15,8 +15,8 @@ public class DataManagerDbContext : DbContext
 
     }
 
-    public virtual DbSet<DataModelOne> DataModelOnes { get; set; }
-    public virtual DbSet<DataModelTwo> DataModelTwos { get; set; }
+    public virtual DbSet<ModelOne> ModelOnes { get; set; }
+    public virtual DbSet<ModelTwo> ModelTwos { get; set; }
     public virtual DbSet<Exit> Exits { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -29,9 +29,9 @@ public class DataManagerDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        modelBuilder.Entity<DataModelOne>(entity =>
+        modelBuilder.Entity<ModelOne>(entity =>
         {
-            entity.HasOne(a => a.Exit).WithMany(e => e.DataModelOnes).HasForeignKey(a => a.ExitId).IsRequired();
+            entity.HasOne(a => a.Exit).WithMany(e => e.ModelOnes).HasForeignKey(a => a.ExitId).IsRequired();
             entity.Property(e => e.Port).IsRequired();
             entity.Property(e => e.UserGroup).IsRequired();
             entity.Property(e => e.Country).IsRequired();
@@ -44,9 +44,9 @@ public class DataManagerDbContext : DbContext
 
         });
 
-        modelBuilder.Entity<DataModelTwo>(entity =>
+        modelBuilder.Entity<ModelTwo>(entity =>
         {
-            entity.HasOne(f => f.Exit).WithMany(e => e.DataModelTwos).HasForeignKey(f => f.ExitId).IsRequired();
+            entity.HasOne(f => f.Exit).WithMany(e => e.ModelTwos).HasForeignKey(f => f.ExitId).IsRequired();
             entity.Property(e => e.PeriodStartDate).IsRequired();
             entity.Property(e => e.PeriodEndDate).IsRequired();
             entity.Property(e => e.GainAmountThree).IsRequired();

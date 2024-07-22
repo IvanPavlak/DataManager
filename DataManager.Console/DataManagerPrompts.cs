@@ -21,9 +21,9 @@ public class DataManagerPrompts
         {
             AnsiConsole.MarkupLine("[bold green1]=> Importing data![/]");
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-            DataManagerService.ImportToDatabase(csvFilePath, DataType.dataModelOne);
+            DataManagerService.ImportToDatabase(csvFilePath, DataType.ModelOne);
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-            DataManagerService.ImportToDatabase(xlsxFilePath, DataType.dataModelTwo);
+            DataManagerService.ImportToDatabase(xlsxFilePath, DataType.ModelTwo);
             PrettifyConsole.Title("Database Overview", "Up");
             DataManagerService.DatabaseOverview();
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
@@ -46,7 +46,7 @@ public class DataManagerPrompts
             return;
         }
 
-        if (!dbContext.DataModelOnes.Any() || !dbContext.DataModelTwos.Any() || !dbContext.Exits.Any())
+        if (!dbContext.ModelOnes.Any() || !dbContext.ModelTwos.Any() || !dbContext.Exits.Any())
         {
             return;
         }
@@ -57,18 +57,18 @@ public class DataManagerPrompts
                 new SelectionPrompt<string>()
                     .Title("[bold dodgerblue1]=> Do you want to fetch data?[/]")
                     .PageSize(4)
-                    .AddChoices("[bold green1]DataModelOne Data[/]",
-                                "[bold green1]DataModelTwo Data[/]",
+                    .AddChoices("[bold green1]ModelOne Data[/]",
+                                "[bold green1]ModelTwo Data[/]",
                                 "[bold green1]Combined Data[/]",
                                 "[bold red]Cancel[/]"));
 
             switch (choice)
             {
-                case "[bold green1]DataModelOne Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.dataModelOne);
+                case "[bold green1]ModelOne Data[/]":
+                    HandleUserInputAndProcessData(dbContext, DataType.ModelOne);
                     break;
-                case "[bold green1]DataModelTwo Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.dataModelTwo);
+                case "[bold green1]ModelTwo Data[/]":
+                    HandleUserInputAndProcessData(dbContext, DataType.ModelTwo);
                     break;
                 case "[bold green1]Combined Data[/]":
                     HandleUserInputAndProcessData(dbContext, DataType.CombinedData);
@@ -100,19 +100,19 @@ public class DataManagerPrompts
         var dateTo = PromptForDate("dateTo");
         int exitId = PromptForExit(dbContext);
 
-        if (dataType == DataType.dataModelOne)
+        if (dataType == DataType.ModelOne)
         {
-            DataManagerDisplayData.DisplayDataModelOneData(dbContext, dateFrom, dateTo, exitId);
-            ExportDataPrompt(DataModelOneService.FetchDataModelOneData(dbContext, dateFrom, dateTo, exitId));
+            DataManagerDisplay.DisplayModelOneData(dbContext, dateFrom, dateTo, exitId);
+            ExportDataPrompt(ModelOneService.FetchModelOneData(dbContext, dateFrom, dateTo, exitId));
         }
-        else if (dataType == DataType.dataModelTwo)
+        else if (dataType == DataType.ModelTwo)
         {
-            DataManagerDisplayData.DisplayDataModelTwoData(dbContext, dateFrom, dateTo, exitId);
-            ExportDataPrompt(DataModelTwoService.FetchDataModelTwoData(dbContext, dateFrom, dateTo, exitId));
+            DataManagerDisplay.DisplayModelTwoData(dbContext, dateFrom, dateTo, exitId);
+            ExportDataPrompt(ModelTwoService.FetchModelTwoData(dbContext, dateFrom, dateTo, exitId));
         }
         else if (dataType == DataType.CombinedData)
         {
-            DataManagerDisplayData.DisplayCombinedData(dbContext, dateFrom, dateTo, exitId);
+            DataManagerDisplay.DisplayCombinedData(dbContext, dateFrom, dateTo, exitId);
             ExportDataPrompt(CombinedDataService.FetchCombinedData(dbContext, dateFrom, dateTo, exitId));
         }
     }

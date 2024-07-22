@@ -6,13 +6,13 @@ using DataManager.Core.DbValidation;
 
 namespace DataManager.Core.Services;
 
-public class DataModelTwoService
+public class ModelTwoService
 {
-    public static List<DataModelTwo> ParseXlsx(string filePath)
+    public static List<ModelTwo> ParseXlsx(string filePath)
     {
         AnsiConsole.MarkupLine($"[bold dodgerblue1]Parsing data from:[/] [bold red]{Path.GetFileName(filePath)}[/]");
 
-        List<DataModelTwo> dataModelTwoList = [];
+        List<ModelTwo> modelTwoList = [];
         int parsedRows = 0;
 
         using (var workbook = new XLWorkbook(filePath))
@@ -23,30 +23,30 @@ public class DataModelTwoService
             {
                 foreach (IXLRow row in worksheet.Rows().Skip(2))
                 {
-                    DataModelTwo dataModelTwoData = new();
+                    ModelTwo modelTwoData = new();
 
                     try
                     {
-                        dataModelTwoData.PeriodStartDate = ParseDateOnly(row.Cell(1).GetString());
-                        dataModelTwoData.Exit = new Exit { Name = row.Cell(2).GetValue<string>() };
-                        dataModelTwoData.GainAmountThree = row.Cell(3).GetValue<int>();
-                        dataModelTwoData.PeriodEndDate = ParseDateTime(row.Cell(4).GetString());
+                        modelTwoData.PeriodStartDate = ParseDateOnly(row.Cell(1).GetString());
+                        modelTwoData.Exit = new Exit { Name = row.Cell(2).GetValue<string>() };
+                        modelTwoData.GainAmountThree = row.Cell(3).GetValue<int>();
+                        modelTwoData.PeriodEndDate = ParseDateTime(row.Cell(4).GetString());
 
-                        dataModelTwoList.Add(dataModelTwoData);
+                        modelTwoList.Add(modelTwoData);
                         parsedRows++;
                     }
                     catch (Exception ex)
                     {
                         AnsiConsole.MarkupLine($"[bold red]Error processing row {row.RowNumber()}: {ex.Message}[/]");
-                        dataModelTwoList.Clear();
-                        return dataModelTwoList;
+                        modelTwoList.Clear();
+                        return modelTwoList;
                     }
                 }
 
                 AnsiConsole.MarkupLine($"[bold dodgerblue1]=> Parsed[/] [bold red]{parsedRows}[/] [bold dodgerblue1]rows![/]\n");
             }
         }
-        return dataModelTwoList;
+        return modelTwoList;
     }
 
     private static DateOnly ParseDateOnly(string dateString)
@@ -83,42 +83,42 @@ public class DataModelTwoService
         }
     }
 
-    public static void ImportDataModelTwos(DataManagerDbContext dbContext, List<DataModelTwo> dataModelTwos, Dictionary<string, Exit> exitByName)
+    public static void ImportModelTwos(DataManagerDbContext dbContext, List<ModelTwo> modelTwos, Dictionary<string, Exit> exitByName)
     {
-        var dataModelTwoValidator = new DataModelTwoValidator();
+        var modelTwoValidator = new ModelTwoValidator();
 
-        foreach (var dataModelTwo in dataModelTwos)
+        foreach (var modelTwo in modelTwos)
         {
-            var validationResult = dataModelTwoValidator.Validate(dataModelTwo);
+            var validationResult = modelTwoValidator.Validate(modelTwo);
             if (!validationResult.IsValid)
             {
                 foreach (var error in validationResult.Errors)
                 {
-                    AnsiConsole.MarkupLine($"[bold red]=> Validation error for DataModelTwo: {error.ErrorMessage}[/]");
+                    AnsiConsole.MarkupLine($"[bold red]=> Validation error for ModelTwo: {error.ErrorMessage}[/]");
                 }
                 continue;
             }
 
-            dataModelTwo.Exit = exitByName[dataModelTwo.Exit.Name];
-            dbContext.DataModelTwos.Add(dataModelTwo);
+            modelTwo.Exit = exitByName[modelTwo.Exit.Name];
+            dbContext.ModelTwos.Add(modelTwo);
         }
     }
 
-    public static List<DataModelTwo> FetchDataModelTwoData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
+    public static List<ModelTwo> FetchModelTwoData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
-        IQueryable<DataModelTwo> dataModelTwoQuery = context.DataModelTwos.Where(f => f.PeriodStartDate >= dateFrom);
+        IQueryable<ModelTwo> modelTwoQuery = context.ModelTwos.Where(f => f.PeriodStartDate >= dateFrom);
 
         if (dateTo != default)
         {
-            dataModelTwoQuery = dataModelTwoQuery.Where(f => f.PeriodStartDate <= dateTo);
+            modelTwoQuery = modelTwoQuery.Where(f => f.PeriodStartDate <= dateTo);
         }
 
         if (exitId != default)
         {
-            dataModelTwoQuery = dataModelTwoQuery.Where(f => f.ExitId == exitId);
+            modelTwoQuery = modelTwoQuery.Where(f => f.ExitId == exitId);
         }
 
-        List<DataModelTwo> dataModelTwos = [.. dataModelTwoQuery.OrderBy(f => f.PeriodStartDate).ThenBy(f => f.ExitId)];
+        List<ModelTwo> dataModelTwos = [.. modelTwoQuery.OrderBy(f => f.PeriodStartDate).ThenBy(f => f.ExitId)];
 
         return dataModelTwos;
     }

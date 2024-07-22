@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DataManager.Core.DbValidation;
 
-public class DataModelOneValidator : AbstractValidator<DataModelOne>
+public class ModelOneValidator : AbstractValidator<ModelOne>
 {
-    public DataModelOneValidator()
+    public ModelOneValidator()
     {
         RuleFor(d => d.Exit)
             .NotEmpty();

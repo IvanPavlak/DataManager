@@ -5,15 +5,15 @@ using Spectre.Console;
 
 namespace DataManager.Console;
 
-public class DataManagerDisplayData
+public class DataManagerDisplay
 {
 
-    private static void DataModelOneDataTable(List<DataModelOne> dataModelOnes, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
+    private static void ModelOneDataTable(List<ModelOne> modelOnes, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
     {
         AnsiConsole.Clear(); // By commenting this line, table pages are rendered below each other
-        PrettifyConsole.Title("DataModelOne Data", "up");
+        PrettifyConsole.Title("ModelOne Data", "up");
 
-        var totalItems = dataModelOnes.Count;
+        var totalItems = modelOnes.Count;
         var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
         if (totalItems == 0)
@@ -49,42 +49,42 @@ public class DataManagerDisplayData
 
         for (int i = startIndex; i < endIndex; i++)
         {
-            var item = dataModelOnes[i];
-            if (item is DataModelOne dataModelOne)
+            var item = modelOnes[i];
+            if (item is ModelOne modelOne)
             {
                 var exitName = dbContext.Exits
-                    .Where(e => e.Id == dataModelOne.ExitId)
+                    .Where(e => e.Id == modelOne.ExitId)
                     .Select(e => e.Name)
                     .FirstOrDefault();
 
                 table.AddRow(exitName ?? "Unknown",
-                             dataModelOne.UserGroup.ToString(),
-                             dataModelOne.Country.ToString(),
-                             dataModelOne.MemberId.ToString(),
-                             dataModelOne.Date.ToString("dd.MM.yyyy"),
-                             dataModelOne.GainAmountOne.ToString(),
-                             dataModelOne.GainAmountTwo.ToString(),
-                             dataModelOne.Loss.ToString(),
-                             dataModelOne.Total.ToString());
+                             modelOne.UserGroup.ToString(),
+                             modelOne.Country.ToString(),
+                             modelOne.MemberId.ToString(),
+                             modelOne.Date.ToString("dd.MM.yyyy"),
+                             modelOne.GainAmountOne.ToString(),
+                             modelOne.GainAmountTwo.ToString(),
+                             modelOne.Loss.ToString(),
+                             modelOne.Total.ToString());
             }
         }
 
         AnsiConsole.Write(table);
-        PrettifyConsole.Pagination(dataModelOnes, dbContext, pageNumber, pageSize, DataModelOneDataTable);
+        PrettifyConsole.Pagination(modelOnes, dbContext, pageNumber, pageSize, ModelOneDataTable);
     }
 
-    public static void DisplayDataModelOneData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
+    public static void DisplayModelOneData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
-        var data = DataModelOneService.FetchDataModelOneData(context, dateFrom, dateTo, exitId);
-        DataModelOneDataTable(data, context);
+        var data = ModelOneService.FetchModelOneData(context, dateFrom, dateTo, exitId);
+        ModelOneDataTable(data, context);
     }
 
-    private static void DataModelTwoDataTable(List<DataModelTwo> dataModelTwos, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
+    private static void ModelTwoDataTable(List<ModelTwo> modelTwos, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
     {
         AnsiConsole.Clear(); // By commenting this line, table pages are rendered below each other
-        PrettifyConsole.Title("DataModelTwo Data", "up");
+        PrettifyConsole.Title("ModelTwo Data", "up");
 
-        var totalItems = dataModelTwos.Count;
+        var totalItems = modelTwos.Count;
         var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
         if (totalItems == 0)
@@ -110,26 +110,26 @@ public class DataManagerDisplayData
 
         for (int i = startIndex; i < endIndex; i++)
         {
-            var dataModelTwo = dataModelTwos[i];
+            var modelTwo = modelTwos[i];
             var exitName = dbContext.Exits
-                .Where(e => e.Id == dataModelTwo.ExitId)
+                .Where(e => e.Id == modelTwo.ExitId)
                 .Select(e => e.Name)
                 .FirstOrDefault();
 
             table.AddRow(exitName ?? "Unknown",
-                         dataModelTwo.PeriodStartDate.ToString("dd.MM.yyyy"),
-                         dataModelTwo.PeriodEndDate.ToString("dd.MM.yyyy"),
-                         dataModelTwo.GainAmountThree.ToString());
+                         modelTwo.PeriodStartDate.ToString("dd.MM.yyyy"),
+                         modelTwo.PeriodEndDate.ToString("dd.MM.yyyy"),
+                         modelTwo.GainAmountThree.ToString());
         }
 
         AnsiConsole.Write(table);
-        PrettifyConsole.Pagination(dataModelTwos, dbContext, pageNumber, pageSize, DataModelTwoDataTable);
+        PrettifyConsole.Pagination(modelTwos, dbContext, pageNumber, pageSize, ModelTwoDataTable);
     }
 
-    public static void DisplayDataModelTwoData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
+    public static void DisplayModelTwoData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
-        var dataModelTwos = DataModelTwoService.FetchDataModelTwoData(context, dateFrom, dateTo, exitId);
-        DataModelTwoDataTable(dataModelTwos, context);
+        var modelTwos = ModelTwoService.FetchModelTwoData(context, dateFrom, dateTo, exitId);
+        ModelTwoDataTable(modelTwos, context);
     }
 
     private static void CombinedDataTable(List<CombinedDataService> combinedData, DataManagerDbContext dbContext, int pageNumber = 1, int pageSize = 15)
@@ -173,8 +173,8 @@ public class DataManagerDisplayData
 
             table.AddRow(exitName ?? "Unknown",
                          item.Date.ToString("dd.MM.yyyy"),
-                         item.TotalDataModelTwo.ToString(),
-                         item.TotalDataModelOne.ToString(),
+                         item.TotalModelTwo.ToString(),
+                         item.TotalModelOne.ToString(),
                          $"{item.Ratio:F4}");
         }
 

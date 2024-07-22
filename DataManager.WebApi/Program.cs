@@ -37,8 +37,8 @@ app.UseMiddleware<RequestTimingMiddleware>();
 await app.Services.InitializeDbAsync();
 
 app.UseHttpLogging();
-app.MapDataModelOnesEndpoints();
-app.MapDataModelTwosEndpoints();
+app.MapModelOnesEndpoints();
+app.MapModelTwosEndpoints();
 
 app.UseDataManagerSwagger();
 

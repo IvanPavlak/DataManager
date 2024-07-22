@@ -19,8 +19,8 @@ public class DataManagerService
 
     public enum DataType
     {
-        dataModelOne,
-        dataModelTwo,
+        ModelOne,
+        ModelTwo,
         CombinedData
     }
 
@@ -34,15 +34,15 @@ public class DataManagerService
 
         switch (dataType)
         {
-            case DataType.dataModelOne:
-                var dataModelOnes = DataModelOneService.ParseCsv(filePath);
-                ImportExits(dataModelOnes.Select(a => a.Exit).ToList(), exitByName);
-                DataModelOneService.ImportDataModelOnes(_dbContext, dataModelOnes, exitByName);
+            case DataType.ModelOne:
+                var ModelOnes = ModelOneService.ParseCsv(filePath);
+                ImportExits(ModelOnes.Select(a => a.Exit).ToList(), exitByName);
+                ModelOneService.ImportModelOnes(_dbContext, ModelOnes, exitByName);
                 break;
-            case DataType.dataModelTwo:
-                var dataModelTwos = DataModelTwoService.ParseXlsx(filePath);
-                ImportExits(dataModelTwos.Select(f => f.Exit).ToList(), exitByName);
-                DataModelTwoService.ImportDataModelTwos(_dbContext, dataModelTwos, exitByName);
+            case DataType.ModelTwo:
+                var ModelTwos = ModelTwoService.ParseXlsx(filePath);
+                ImportExits(ModelTwos.Select(f => f.Exit).ToList(), exitByName);
+                ModelTwoService.ImportModelTwos(_dbContext, ModelTwos, exitByName);
                 break;
             default:
                 throw new ArgumentException("Invalid data type specified!");
@@ -200,7 +200,7 @@ public class DataManagerService
             return;
         }
 
-        if (!_dbContext.DataModelOnes.Any() || !_dbContext.DataModelTwos.Any() || !_dbContext.Exits.Any())
+        if (!_dbContext.ModelOnes.Any() || !_dbContext.ModelTwos.Any() || !_dbContext.Exits.Any())
         {
             AnsiConsole.MarkupLine("[bold red]A table in DataManager database contains no data![/]");
             return;
@@ -214,12 +214,12 @@ public class DataManagerService
         table.Centered();
         table.Border(TableBorder.Rounded);
 
-        int dataModelTwosRowCount = _dbContext.DataModelTwos.Count();
-        int dataModelOnesRowCount = _dbContext.DataModelOnes.Count();
+        int ModelOnesRowCount = _dbContext.ModelOnes.Count();
+        int ModelTwosRowCount = _dbContext.ModelTwos.Count();
         int exitRowCount = _dbContext.Exits.Count();
 
-        table.AddRow("[bold dodgerblue1]DataModelTwos[/]", $"[bold red]{dataModelTwosRowCount}[/]");
-        table.AddRow("[bold dodgerblue1]DataModelOnes[/]", $"[bold red]{dataModelOnesRowCount}[/]");
+        table.AddRow("[bold dodgerblue1]ModelOnes[/]", $"[bold red]{ModelOnesRowCount}[/]");
+        table.AddRow("[bold dodgerblue1]ModelTwos[/]", $"[bold red]{ModelTwosRowCount}[/]");
         table.AddRow("[bold dodgerblue1]Exits[/]", $"[bold red]{exitRowCount}[/]");
 
         AnsiConsole.Write(table);

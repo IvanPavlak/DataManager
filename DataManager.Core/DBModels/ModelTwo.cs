@@ -1,6 +1,6 @@
 namespace DataManager.Core.DBModels;
 
-public class DataModelTwo : Entity
+public class ModelTwo : Entity
 {
     public int ExitId { get; set; }
     public virtual Exit Exit { get; set; }
