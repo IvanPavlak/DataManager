@@ -2,36 +2,36 @@ using System.Diagnostics;
 using DataManager.Core.DBModels;
 using DataManager.WebApi.Authorization;
 using DataManager.WebApi.DTOs;
-using DataManager.WebApi.Endpoints;
 using DataManager.WebApi.Repositories;
 
 namespace DataManager.WebApi.Endpoints;
 
-public static class ModelTwosEndpoints
+public static class ModelOnesEndpoints
 {
-    const string GetModelTwoV1EndpointName = "GetModelTwo";
+    const string GetModelOneV1EndpointName = "GetModelOne";
 
-    public static RouteGroupBuilder MapModelTwosEndpoints(this IEndpointRouteBuilder routes)
+    public static RouteGroupBuilder MapModelOnesEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.NewVersionedApi()
-                          .MapGroup("/ModelTwos")
+                          .MapGroup("/ModelOnes")
                           .HasApiVersion(1.0);
 
         group.MapGet("/", async (
-            IModelTwosRepository repository,
+            IModelOnesRepository repository,
             ILoggerFactory loggerFactory,
-            [AsParameters] GetModelTwoDto request,
+            [AsParameters] GetModelOneDto request,
             HttpContext http) =>
             {
-                var totalCount = await repository.CountModelTwoAsync();
+                var totalCount = await repository.CountModelOneAsync(request.Filter);
                 http.Response.AddPaginationHeader(totalCount, request.PageSize);
-                var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
+
+                var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
                 try
                 {
-                    var ModelTwos = await repository.GetAllModelTwosAsync(request.PageNumber, request.PageSize);
-                    logger.LogInformation("Retrieved all ModelTwos successfully.");
-                    return Results.Ok(ModelTwos.Select(ModelTwo => ModelTwo.AsDtoV1()));
+                    var ModelOnes = await repository.GetAllModelOnesAsync(request.PageNumber, request.PageSize, request.Filter);
+                    logger.LogInformation("Retrieved all ModelOnes successfully.");
+                    return Results.Ok(ModelOnes.Select(ModelOne => ModelOne.AsDtoV1()));
                 }
                 catch (Exception ex)
                 {
@@ -52,21 +52,21 @@ public static class ModelTwosEndpoints
             .RequireAuthorization(Policies.ReadAccess)
             .MapToApiVersion(1.0);
 
-        group.MapGet("/{id}", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, int id) =>
+        group.MapGet("/{id}", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, int id) =>
         {
-            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var ModelTwo = await repository.GetModelTwoAsync(id);
-                if (ModelTwo is not null)
+                var ModelOne = await repository.GetModelOneAsync(id);
+                if (ModelOne is not null)
                 {
-                    logger.LogInformation("Retrieved ModelTwo with ID {Id} successfully.", id);
-                    return Results.Ok(ModelTwo.AsDtoV1());
+                    logger.LogInformation("Retrieved ModelOne with ID {Id} successfully.", id);
+                    return Results.Ok(ModelOne.AsDtoV1());
                 }
                 else
                 {
-                    logger.LogWarning("ModelTwo with ID {Id} not found.", id);
+                    logger.LogWarning("ModelOne with ID {Id} not found.", id);
                     return Results.NotFound();
                 }
             }
@@ -86,27 +86,33 @@ public static class ModelTwosEndpoints
                 );
             }
         })
-        .WithName(GetModelTwoV1EndpointName)
+        .WithName(GetModelOneV1EndpointName)
         .RequireAuthorization(Policies.ReadAccess)
-        .MapToApiVersion(1.0);
+        .MapToApiVersion(1.0); ;
 
-        group.MapPost("/", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, CreateModelTwoDto ModelTwoDto) =>
+        group.MapPost("/", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, CreateModelOneDto ModelOneDto) =>
         {
-            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var modelTwo = new ModelTwo
+                var modelOne = new ModelOne
                 {
-                    ExitId = ModelTwoDto.ExitId,
-                    PeriodStartDate = ModelTwoDto.PeriodStartDate,
-                    PeriodEndDate = ModelTwoDto.PeriodEndDate,
-                    GainAmountThree = ModelTwoDto.GainAmountThree
+                    ExitId = ModelOneDto.ExitId,
+                    Port = ModelOneDto.Port,
+                    UserGroup = ModelOneDto.UserGroup,
+                    Country = ModelOneDto.Country,
+                    MemberId = ModelOneDto.MemberId,
+                    Date = ModelOneDto.Date,
+                    GainAmountOne = ModelOneDto.GainAmountOne,
+                    GainAmountTwo = ModelOneDto.GainAmountTwo,
+                    Loss = ModelOneDto.Loss,
+                    Total = ModelOneDto.Total
                 };
 
-                await repository.CreateModelTwoAsync(modelTwo);
-                logger.LogInformation("Created a new ModelTwo with ID {Id} successfully.", modelTwo.Id);
-                return Results.CreatedAtRoute(GetModelTwoV1EndpointName, new { id = modelTwo.Id }, modelTwo);
+                await repository.CreateModelOneAsync(modelOne);
+                logger.LogInformation("Created a new ModelOne with ID {Id} successfully.", modelOne.Id);
+                return Results.CreatedAtRoute(GetModelOneV1EndpointName, new { id = modelOne.Id }, modelOne);
             }
             catch (Exception ex)
             {
@@ -125,28 +131,34 @@ public static class ModelTwosEndpoints
             }
         })
         .RequireAuthorization(Policies.WriteAccess)
-        .MapToApiVersion(1.0);
+        .MapToApiVersion(1.0); ;
 
-        group.MapPut("/{id}", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, int id, UpdateModelTwoDto updatedModelTwoDto) =>
+        group.MapPut("/{id}", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, int id, UpdateModelOneDto updatedModelOneDto) =>
         {
-            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var existingModelTwo = await repository.GetModelTwoAsync(id);
+                var existingModelOne = await repository.GetModelOneAsync(id);
 
-                if (existingModelTwo is null)
+                if (existingModelOne is null)
                 {
-                    logger.LogWarning("ModelTwo with ID {Id} not found.", id);
+                    logger.LogWarning("ModelOne with ID {Id} not found.", id);
                     return Results.NotFound();
                 }
 
-                existingModelTwo.PeriodStartDate = updatedModelTwoDto.PeriodStartDate;
-                existingModelTwo.PeriodEndDate = updatedModelTwoDto.PeriodEndDate;
-                existingModelTwo.GainAmountThree = updatedModelTwoDto.GainAmountThree;
+                existingModelOne.Port = updatedModelOneDto.Port;
+                existingModelOne.UserGroup = updatedModelOneDto.UserGroup;
+                existingModelOne.Country = updatedModelOneDto.Country;
+                existingModelOne.MemberId = updatedModelOneDto.MemberId;
+                existingModelOne.Date = updatedModelOneDto.Date;
+                existingModelOne.GainAmountOne = updatedModelOneDto.GainAmountOne;
+                existingModelOne.GainAmountTwo = updatedModelOneDto.GainAmountTwo;
+                existingModelOne.Loss = updatedModelOneDto.Loss;
+                existingModelOne.Total = updatedModelOneDto.Total;
 
-                await repository.UpdateModelTwoAsync(existingModelTwo);
-                logger.LogInformation("Updated ModelTwo with ID {Id} successfully.", id);
+                await repository.UpdateModelOneAsync(existingModelOne);
+                logger.LogInformation("Updated ModelOne with ID {Id} successfully.", id);
 
                 return Results.NoContent();
             }
@@ -167,24 +179,24 @@ public static class ModelTwosEndpoints
             }
         })
         .RequireAuthorization(Policies.WriteAccess)
-        .MapToApiVersion(1.0);
+        .MapToApiVersion(1.0); ;
 
-        group.MapDelete("/{id}", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, int id) =>
+        group.MapDelete("/{id}", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, int id) =>
         {
-            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var ModelTwo = await repository.GetModelTwoAsync(id);
+                var ModelOne = await repository.GetModelOneAsync(id);
 
-                if (ModelTwo is not null)
+                if (ModelOne is not null)
                 {
-                    await repository.DeleteModelTwoAsync(id);
-                    logger.LogInformation("Deleted ModelTwo with ID {Id} successfully.", id);
+                    await repository.DeleteModelOneAsync(id);
+                    logger.LogInformation("Deleted ModelOne with ID {Id} successfully.", id);
                 }
                 else
                 {
-                    logger.LogWarning("ModelTwo with ID {Id} not found.", id);
+                    logger.LogWarning("ModelOne with ID {Id} not found.", id);
                 }
 
                 return Results.NoContent();
@@ -206,7 +218,7 @@ public static class ModelTwosEndpoints
             }
         })
         .RequireAuthorization(Policies.WriteAccess)
-        .MapToApiVersion(1.0);
+        .MapToApiVersion(1.0); ;
 
         return group;
     }
