@@ -1,36 +1,36 @@
 using System.Diagnostics;
-using DataManager.Core.DBModels;
-using DataManager.WebApi.Authorization;
 using DataManager.WebApi.DTOs;
+using DataManager.Core.DBModels;
 using DataManager.WebApi.Repositories;
+using DataManager.WebApi.Authorization;
 
 namespace DataManager.WebApi.Endpoints;
 
-public static class DataModelTwosEndpoints
+public static class ModelTwosEndpoints
 {
-    const string GetDataModelTwoV1EndpointName = "GetDataModelTwo";
+    const string GetModelTwoV1EndpointName = "GetModelTwo";
 
-    public static RouteGroupBuilder MapDataModelTwosEndpoints(this IEndpointRouteBuilder routes)
+    public static RouteGroupBuilder MapModelTwosEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.NewVersionedApi()
-                          .MapGroup("/dataModelTwos")
+                          .MapGroup("/ModelTwos")
                           .HasApiVersion(1.0);
 
         group.MapGet("/", async (
-            IDataModelTwosRepository repository,
+            IModelTwosRepository repository,
             ILoggerFactory loggerFactory,
-            [AsParameters] GetDataModelTwoDto request,
+            [AsParameters] GetModelTwoDto request,
             HttpContext http) =>
             {
-                var totalCount = await repository.CountDataModelTwoAsync();
+                var totalCount = await repository.CountModelTwoAsync();
                 http.Response.AddPaginationHeader(totalCount, request.PageSize);
-                var logger = loggerFactory.CreateLogger("DataModelTwos Endpoints");
+                var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
 
                 try
                 {
-                    var dataModelTwos = await repository.GetAllDataModelTwosAsync(request.PageNumber, request.PageSize);
-                    logger.LogInformation("Retrieved all DataModelTwos successfully.");
-                    return Results.Ok(dataModelTwos.Select(dataModelTwo => dataModelTwo.AsDtoV1()));
+                    var ModelTwos = await repository.GetAllModelTwosAsync(request.PageNumber, request.PageSize);
+                    logger.LogInformation("Retrieved all ModelTwos successfully.");
+                    return Results.Ok(ModelTwos.Select(ModelTwo => ModelTwo.AsDtoV1()));
                 }
                 catch (Exception ex)
                 {
@@ -51,21 +51,21 @@ public static class DataModelTwosEndpoints
             .RequireAuthorization(Policies.ReadAccess)
             .MapToApiVersion(1.0);
 
-        group.MapGet("/{id}", async (IDataModelTwosRepository repository, ILoggerFactory loggerFactory, int id) =>
+        group.MapGet("/{id}", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, int id) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
 
             try
             {
-                var dataModelTwo = await repository.GetDataModelTwoAsync(id);
-                if (dataModelTwo is not null)
+                var ModelTwo = await repository.GetModelTwoAsync(id);
+                if (ModelTwo is not null)
                 {
-                    logger.LogInformation("Retrieved DataModelTwo with ID {Id} successfully.", id);
-                    return Results.Ok(dataModelTwo.AsDtoV1());
+                    logger.LogInformation("Retrieved ModelTwo with ID {Id} successfully.", id);
+                    return Results.Ok(ModelTwo.AsDtoV1());
                 }
                 else
                 {
-                    logger.LogWarning("DataModelTwo with ID {Id} not found.", id);
+                    logger.LogWarning("ModelTwo with ID {Id} not found.", id);
                     return Results.NotFound();
                 }
             }
@@ -85,27 +85,27 @@ public static class DataModelTwosEndpoints
                 );
             }
         })
-        .WithName(GetDataModelTwoV1EndpointName)
+        .WithName(GetModelTwoV1EndpointName)
         .RequireAuthorization(Policies.ReadAccess)
         .MapToApiVersion(1.0);
 
-        group.MapPost("/", async (IDataModelTwosRepository repository, ILoggerFactory loggerFactory, CreateDataModelTwoDto dataModelTwoDto) =>
+        group.MapPost("/", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, CreateModelTwoDto ModelTwoDto) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
 
             try
             {
-                var dataModelTwo = new DataModelTwo
+                var modelTwo = new ModelTwo
                 {
-                    ExitId = dataModelTwoDto.ExitId,
-                    PeriodStartDate = dataModelTwoDto.PeriodStartDate,
-                    PeriodEndDate = dataModelTwoDto.PeriodEndDate,
-                    GainAmountThree = dataModelTwoDto.GainAmountThree
+                    ExitId = ModelTwoDto.ExitId,
+                    PeriodStartDate = ModelTwoDto.PeriodStartDate,
+                    PeriodEndDate = ModelTwoDto.PeriodEndDate,
+                    GainAmountThree = ModelTwoDto.GainAmountThree
                 };
 
-                await repository.CreateDataModelTwoAsync(dataModelTwo);
-                logger.LogInformation("Created a new DataModelTwo with ID {Id} successfully.", dataModelTwo.Id);
-                return Results.CreatedAtRoute(GetDataModelTwoV1EndpointName, new { id = dataModelTwo.Id }, dataModelTwo);
+                await repository.CreateModelTwoAsync(modelTwo);
+                logger.LogInformation("Created a new ModelTwo with ID {Id} successfully.", modelTwo.Id);
+                return Results.CreatedAtRoute(GetModelTwoV1EndpointName, new { id = modelTwo.Id }, modelTwo);
             }
             catch (Exception ex)
             {
@@ -126,26 +126,26 @@ public static class DataModelTwosEndpoints
         .RequireAuthorization(Policies.WriteAccess)
         .MapToApiVersion(1.0);
 
-        group.MapPut("/{id}", async (IDataModelTwosRepository repository, ILoggerFactory loggerFactory, int id, UpdateDataModelTwoDto updatedDataModelTwoDto) =>
+        group.MapPut("/{id}", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, int id, UpdateModelTwoDto updatedModelTwoDto) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
 
             try
             {
-                var existingDataModelTwo = await repository.GetDataModelTwoAsync(id);
+                var existingModelTwo = await repository.GetModelTwoAsync(id);
 
-                if (existingDataModelTwo is null)
+                if (existingModelTwo is null)
                 {
-                    logger.LogWarning("DataModelTwo with ID {Id} not found.", id);
+                    logger.LogWarning("ModelTwo with ID {Id} not found.", id);
                     return Results.NotFound();
                 }
 
-                existingDataModelTwo.PeriodStartDate = updatedDataModelTwoDto.PeriodStartDate;
-                existingDataModelTwo.PeriodEndDate = updatedDataModelTwoDto.PeriodEndDate;
-                existingDataModelTwo.GainAmountThree = updatedDataModelTwoDto.GainAmountThree;
+                existingModelTwo.PeriodStartDate = updatedModelTwoDto.PeriodStartDate;
+                existingModelTwo.PeriodEndDate = updatedModelTwoDto.PeriodEndDate;
+                existingModelTwo.GainAmountThree = updatedModelTwoDto.GainAmountThree;
 
-                await repository.UpdateDataModelTwoAsync(existingDataModelTwo);
-                logger.LogInformation("Updated DataModelTwo with ID {Id} successfully.", id);
+                await repository.UpdateModelTwoAsync(existingModelTwo);
+                logger.LogInformation("Updated ModelTwo with ID {Id} successfully.", id);
 
                 return Results.NoContent();
             }
@@ -168,22 +168,22 @@ public static class DataModelTwosEndpoints
         .RequireAuthorization(Policies.WriteAccess)
         .MapToApiVersion(1.0);
 
-        group.MapDelete("/{id}", async (IDataModelTwosRepository repository, ILoggerFactory loggerFactory, int id) =>
+        group.MapDelete("/{id}", async (IModelTwosRepository repository, ILoggerFactory loggerFactory, int id) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelTwos Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelTwos Endpoints");
 
             try
             {
-                var dataModelTwo = await repository.GetDataModelTwoAsync(id);
+                var ModelTwo = await repository.GetModelTwoAsync(id);
 
-                if (dataModelTwo is not null)
+                if (ModelTwo is not null)
                 {
-                    await repository.DeleteDataModelTwoAsync(id);
-                    logger.LogInformation("Deleted DataModelTwo with ID {Id} successfully.", id);
+                    await repository.DeleteModelTwoAsync(id);
+                    logger.LogInformation("Deleted ModelTwo with ID {Id} successfully.", id);
                 }
                 else
                 {
-                    logger.LogWarning("DataModelTwo with ID {Id} not found.", id);
+                    logger.LogWarning("ModelTwo with ID {Id} not found.", id);
                 }
 
                 return Results.NoContent();

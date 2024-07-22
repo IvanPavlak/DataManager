@@ -2,12 +2,12 @@ using DataManager.Core.DBModels;
 
 namespace DataManager.WebApi.Repositories;
 
-public interface IDataModelOnesRepository
+public interface IModelOnesRepository
 {
-    Task CreateDataModelOneAsync(DataModelOne dataModelOne);
-    Task DeleteDataModelOneAsync(int id);
-    Task<DataModelOne> GetDataModelOneAsync(int id);
-    Task<IEnumerable<DataModelOne>> GetAllDataModelOnesAsync(int pageNumber, int pageSize, string filter = null);
-    Task UpdateDataModelOneAsync(DataModelOne updatedDataModelOnes);
-    Task<int> CountDataModelOneAsync(string filter = null);
+    Task CreateModelOneAsync(ModelOne ModelOne);
+    Task DeleteModelOneAsync(int id);
+    Task<ModelOne> GetModelOneAsync(int id);
+    Task<IEnumerable<ModelOne>> GetAllModelOnesAsync(int pageNumber, int pageSize, string filter = null);
+    Task UpdateModelOneAsync(ModelOne updatedModelOnes);
+    Task<int> CountModelOneAsync(string filter = null);
 }

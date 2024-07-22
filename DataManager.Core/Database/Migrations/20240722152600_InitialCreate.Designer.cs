@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataManager.Core.Database.Migrations
 {
     [DbContext(typeof(DataManagerDbContext))]
-    [Migration("20240719214010_InitialCreate")]
+    [Migration("20240722152600_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,24 @@ namespace DataManager.Core.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DataManager.Core.DBModels.DataModelOne", b =>
+            modelBuilder.Entity("DataManager.Core.DBModels.Exit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Exits");
+                });
+
+            modelBuilder.Entity("DataManager.Core.DBModels.ModelOne", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,10 +87,10 @@ namespace DataManager.Core.Database.Migrations
 
                     b.HasIndex("ExitId");
 
-                    b.ToTable("DataModelOnes");
+                    b.ToTable("ModelOnes");
                 });
 
-            modelBuilder.Entity("DataManager.Core.DBModels.DataModelTwo", b =>
+            modelBuilder.Entity("DataManager.Core.DBModels.ModelTwo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,30 +114,13 @@ namespace DataManager.Core.Database.Migrations
 
                     b.HasIndex("ExitId");
 
-                    b.ToTable("DataModelTwos");
+                    b.ToTable("ModelTwos");
                 });
 
-            modelBuilder.Entity("DataManager.Core.DBModels.Exit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Exits");
-                });
-
-            modelBuilder.Entity("DataManager.Core.DBModels.DataModelOne", b =>
+            modelBuilder.Entity("DataManager.Core.DBModels.ModelOne", b =>
                 {
                     b.HasOne("DataManager.Core.DBModels.Exit", "Exit")
-                        .WithMany("DataModelOnes")
+                        .WithMany("ModelOnes")
                         .HasForeignKey("ExitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -128,10 +128,10 @@ namespace DataManager.Core.Database.Migrations
                     b.Navigation("Exit");
                 });
 
-            modelBuilder.Entity("DataManager.Core.DBModels.DataModelTwo", b =>
+            modelBuilder.Entity("DataManager.Core.DBModels.ModelTwo", b =>
                 {
                     b.HasOne("DataManager.Core.DBModels.Exit", "Exit")
-                        .WithMany("DataModelTwos")
+                        .WithMany("ModelTwos")
                         .HasForeignKey("ExitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -141,9 +141,9 @@ namespace DataManager.Core.Database.Migrations
 
             modelBuilder.Entity("DataManager.Core.DBModels.Exit", b =>
                 {
-                    b.Navigation("DataModelOnes");
+                    b.Navigation("ModelOnes");
 
-                    b.Navigation("DataModelTwos");
+                    b.Navigation("ModelTwos");
                 });
 #pragma warning restore 612, 618
         }

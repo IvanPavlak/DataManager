@@ -1,11 +1,11 @@
 using Moq;
-using DataManager.Core.Services;
 using DataManager.Core;
+using DataManager.Core.Services;
 using DataManager.Core.DBModels;
 
 namespace DataManager.Test
 {
-    public class DataModelOneServiceTests
+    public class ModelOneServiceTests
     {
         private enum TestDataScenario
         {
@@ -37,43 +37,43 @@ namespace DataManager.Test
         }
 
         [Fact]
-        public void ParseCsv_DataParsedCorrectly_ReturnsDataModelOneList()
+        public void ParseCsv_DataParsedCorrectly_ReturnsModelOneList()
         {
             // Arrange
-            string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ValidDataModelOneTestData.csv");
+            string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ValidModelOneTestData.csv");
             CreateTestCsvData(testFilePath, TestDataScenario.ValidData);
 
             // Act
-            var dataModelOnes = DataModelOneService.ParseCsv(testFilePath);
+            var modelOnes = ModelOneService.ParseCsv(testFilePath);
 
             // Assert
-            Assert.NotNull(dataModelOnes);
-            Assert.NotEmpty(dataModelOnes);
-            Assert.Equal(2, dataModelOnes.Count); // Check if the correct number of dataModelOnes are read
+            Assert.NotNull(modelOnes);
+            Assert.NotEmpty(modelOnes);
+            Assert.Equal(2, modelOnes.Count); // Check if the correct number of ModelOnes are read
 
-            // Check if the data of the first dataModelOne is read correctly
-            Assert.Equal("Exit1", dataModelOnes[0].Exit.Name);
-            Assert.Equal("Port1", dataModelOnes[0].Port);
-            Assert.Equal("UserGroup1", dataModelOnes[0].UserGroup);
-            Assert.Equal("Country1", dataModelOnes[0].Country);
-            Assert.Equal(1, dataModelOnes[0].MemberId);
-            Assert.Equal(new DateOnly(2024, 01, 01), dataModelOnes[0].Date);
-            Assert.Equal(5000, dataModelOnes[0].GainAmountOne);
-            Assert.Equal(3000, dataModelOnes[0].GainAmountTwo);
-            Assert.Equal(500, dataModelOnes[0].Loss);
-            Assert.Equal(7500, dataModelOnes[0].Total);
+            // Check if the data of the first ModelOne is read correctly
+            Assert.Equal("Exit1", modelOnes[0].Exit.Name);
+            Assert.Equal("Port1", modelOnes[0].Port);
+            Assert.Equal("UserGroup1", modelOnes[0].UserGroup);
+            Assert.Equal("Country1", modelOnes[0].Country);
+            Assert.Equal(1, modelOnes[0].MemberId);
+            Assert.Equal(new DateOnly(2024, 01, 01), modelOnes[0].Date);
+            Assert.Equal(5000, modelOnes[0].GainAmountOne);
+            Assert.Equal(3000, modelOnes[0].GainAmountTwo);
+            Assert.Equal(500, modelOnes[0].Loss);
+            Assert.Equal(7500, modelOnes[0].Total);
 
-            // Check if the data of the second dataModelOne is read correctly
-            Assert.Equal("Exit2", dataModelOnes[1].Exit.Name);
-            Assert.Equal("Port2", dataModelOnes[1].Port);
-            Assert.Equal("UserGroup2", dataModelOnes[1].UserGroup);
-            Assert.Equal("Country2", dataModelOnes[1].Country);
-            Assert.Equal(2, dataModelOnes[1].MemberId);
-            Assert.Equal(new DateOnly(2024, 01, 02), dataModelOnes[1].Date);
-            Assert.Equal(6000, dataModelOnes[1].GainAmountOne);
-            Assert.Equal(4000, dataModelOnes[1].GainAmountTwo);
-            Assert.Equal(600, dataModelOnes[1].Loss);
-            Assert.Equal(9400, dataModelOnes[1].Total);
+            // Check if the data of the second ModelOne is read correctly
+            Assert.Equal("Exit2", modelOnes[1].Exit.Name);
+            Assert.Equal("Port2", modelOnes[1].Port);
+            Assert.Equal("UserGroup2", modelOnes[1].UserGroup);
+            Assert.Equal("Country2", modelOnes[1].Country);
+            Assert.Equal(2, modelOnes[1].MemberId);
+            Assert.Equal(new DateOnly(2024, 01, 02), modelOnes[1].Date);
+            Assert.Equal(6000, modelOnes[1].GainAmountOne);
+            Assert.Equal(4000, modelOnes[1].GainAmountTwo);
+            Assert.Equal(600, modelOnes[1].Loss);
+            Assert.Equal(9400, modelOnes[1].Total);
 
             // Clean up test file
             File.Delete(testFilePath);
@@ -83,11 +83,11 @@ namespace DataManager.Test
         public void ParseCsv_InvalidDateData_ReturnsEmptyList()
         {
             // Arrange
-            string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidDataModelOneTestData.csv");
+            string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidModelOneTestData.csv");
             CreateTestCsvData(testFilePath, TestDataScenario.InvalidDate);
 
             // Act
-            var dataModelOnes = DataModelOneService.ParseCsv(testFilePath);
+            var dataModelOnes = ModelOneService.ParseCsv(testFilePath);
 
             // Assert
             Assert.NotNull(dataModelOnes);
@@ -101,11 +101,11 @@ namespace DataManager.Test
         public void ParseCsv_InvalidGainAmountOneData_ReturnsEmptyList()
         {
             // Arrange
-            string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidDataModelOneTestData.csv");
+            string testFilePath = Path.Combine(Directory.GetCurrentDirectory(), "InvalidModelOneTestData.csv");
             CreateTestCsvData(testFilePath, TestDataScenario.InvalidGainAmountOne);
 
             // Act
-            var dataModelOnes = DataModelOneService.ParseCsv(testFilePath);
+            var dataModelOnes = ModelOneService.ParseCsv(testFilePath);
 
             // Assert
             Assert.NotNull(dataModelOnes);
@@ -116,7 +116,7 @@ namespace DataManager.Test
         }
 
         [Fact]
-        public void FetchDataModelOneData_NoFilters_ReturnsAllDataModelOneDataOrderedByDate()
+        public void FetchDataModelOneData_NoFilters_ReturnsAllModelOneDataOrderedByDate()
         {
             // Arrange
             var contextMock = new Mock<DataManagerDbContext>();
@@ -124,26 +124,26 @@ namespace DataManager.Test
             var dateTo = new DateOnly(2024, 6, 1);
             var exitId = default(int); // No filter on exitId
 
-            var dataModelOneData = new List<DataModelOne>
+            var modelOneData = new List<ModelOne>
             {
                 new() { Date = new DateOnly(2024, 1, 5), ExitId = 1 },
                 new() { Date = new DateOnly(2024, 2, 10), ExitId = 2 },
             };
 
             // Mocking the dataModelOnes DbSet in the context
-            var mockDataModelOnes = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-            contextMock.Setup(c => c.DataModelOnes).Returns(mockDataModelOnes.Object);
+            var mockDataModelOnes = MockDbSetHelper.CreateMockDbSet(modelOneData);
+            contextMock.Setup(c => c.ModelOnes).Returns(mockDataModelOnes.Object);
 
             // Act
-            var result = DataModelOneService.FetchDataModelOneData(contextMock.Object, dateFrom, dateTo, exitId);
+            var result = ModelOneService.FetchModelOneData(contextMock.Object, dateFrom, dateTo, exitId);
 
             // Assert
-            // Verify that the result contains all dataModelOnes within the date range, ordered by date
-            Assert.Equal(dataModelOneData.OrderBy(a => a.Date), result);
+            // Verify that the result contains all ModelOnes within the date range, ordered by date
+            Assert.Equal(modelOneData.OrderBy(a => a.Date), result);
         }
 
         [Fact]
-        public void FetchDataModelOnesData_DateRangeFilter_ReturnsDataModelOnesWithinRangeOrderedByDate()
+        public void FetchModelOnesData_DateRangeFilter_ReturnsModelOnesWithinRangeOrderedByDate()
         {
             // Arrange
             var contextMock = new Mock<DataManagerDbContext>();
@@ -151,26 +151,26 @@ namespace DataManager.Test
             var dateTo = new DateOnly(2024, 6, 1);
             var exitId = default(int); // No filter on exitId
 
-            var dataModelOneData = new List<DataModelOne>
+            var modelOneData = new List<ModelOne>
             {
                 new() { Date = new DateOnly(2024, 1, 5), ExitId = 1 },
                 new() { Date = new DateOnly(2024, 2, 10), ExitId = 2 },
             };
 
             // Mocking the dataModelOnes DbSet in the context
-            var mockDataModelOnes = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-            contextMock.Setup(c => c.DataModelOnes).Returns(mockDataModelOnes.Object);
+            var mockModelOnes = MockDbSetHelper.CreateMockDbSet(modelOneData);
+            contextMock.Setup(c => c.ModelOnes).Returns(mockModelOnes.Object);
 
             // Act
-            var result = DataModelOneService.FetchDataModelOneData(contextMock.Object, dateFrom, dateTo, exitId);
+            var result = ModelOneService.FetchModelOneData(contextMock.Object, dateFrom, dateTo, exitId);
 
             // Assert
-            // Verify that the result contains all dataModelOnes within the date range, ordered by date
-            Assert.Equal(dataModelOneData.Where(a => a.Date >= dateFrom && a.Date <= dateTo).OrderBy(a => a.Date), result);
+            // Verify that the result contains all ModelOnes within the date range, ordered by date
+            Assert.Equal(modelOneData.Where(a => a.Date >= dateFrom && a.Date <= dateTo).OrderBy(a => a.Date), result);
         }
 
         [Fact]
-        public void FetchDataModelOnesData_ExitIdFilter_ReturnsDataModelOnesForSpecificExitOrderedByExitIdThenDate()
+        public void FetchModelOnesData_ExitIdFilter_ReturnsModelOnesForSpecificExitOrderedByExitIdThenDate()
         {
             // Arrange
             var contextMock = new Mock<DataManagerDbContext>();
@@ -178,22 +178,22 @@ namespace DataManager.Test
             var dateTo = default(DateOnly);
             var exitId = 1; // Example exit ID
 
-            var dataModelOneData = new List<DataModelOne>
+            var modelOneData = new List<ModelOne>
             {
                 new() { Date = new DateOnly(2024, 1, 5), ExitId = 1 },
                 new() { Date = new DateOnly(2024, 2, 10), ExitId = 1 },
             };
 
-            // Mocking the dataModelOnes DbSet in the context
-            var mockDataModelOnes = MockDbSetHelper.CreateMockDbSet(dataModelOneData);
-            contextMock.Setup(c => c.DataModelOnes).Returns(mockDataModelOnes.Object);
+            // Mocking the ModelOnes DbSet in the context
+            var mockModelOnes = MockDbSetHelper.CreateMockDbSet(modelOneData);
+            contextMock.Setup(c => c.ModelOnes).Returns(mockModelOnes.Object);
 
             // Act
-            var result = DataModelOneService.FetchDataModelOneData(contextMock.Object, dateFrom, dateTo, exitId);
+            var result = ModelOneService.FetchModelOneData(contextMock.Object, dateFrom, dateTo, exitId);
 
             // Assert
-            // Verify that the result contains dataModelOnes only for the specified exit ID, ordered by exit ID then date
-            Assert.Equal(dataModelOneData.Where(a => a.ExitId == exitId).OrderBy(a => a.ExitId).ThenBy(a => a.Date), result);
+            // Verify that the result contains ModelOnes only for the specified exit ID, ordered by exit ID then date
+            Assert.Equal(modelOneData.Where(a => a.ExitId == exitId).OrderBy(a => a.ExitId).ThenBy(a => a.Date), result);
         }
     }
 }

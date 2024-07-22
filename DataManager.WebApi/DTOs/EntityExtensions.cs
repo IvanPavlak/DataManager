@@ -4,30 +4,30 @@ namespace DataManager.WebApi.DTOs;
 
 public static class EntityExtensions
 {
-    public static GetDataModelOneDtoV1 AsDtoV1(this DataModelOne dataModelOne)
+    public static GetModelOneDtoV1 AsDtoV1(this ModelOne modelOne)
     {
-        return new GetDataModelOneDtoV1(
-            dataModelOne.ExitId,
-            dataModelOne.Port,
-            dataModelOne.UserGroup,
-            dataModelOne.Country,
-            dataModelOne.MemberId,
-            dataModelOne.Date,
-            dataModelOne.GainAmountOne,
-            dataModelOne.GainAmountTwo,
-            dataModelOne.Loss,
-            dataModelOne.Total
+        return new GetModelOneDtoV1(
+            modelOne.ExitId,
+            modelOne.Port,
+            modelOne.UserGroup,
+            modelOne.Country,
+            modelOne.MemberId,
+            modelOne.Date,
+            modelOne.GainAmountOne,
+            modelOne.GainAmountTwo,
+            modelOne.Loss,
+            modelOne.Total
 
         );
     }
 
-    public static GetDataModelTwoDtoV1 AsDtoV1(this DataModelTwo dataModelTwo)
+    public static GetModelTwoDtoV1 AsDtoV1(this ModelTwo modelTwo)
     {
-        return new GetDataModelTwoDtoV1(
-            dataModelTwo.ExitId,
-            dataModelTwo.PeriodStartDate,
-            dataModelTwo.PeriodEndDate,
-            dataModelTwo.GainAmountThree
+        return new GetModelTwoDtoV1(
+            modelTwo.ExitId,
+            modelTwo.PeriodStartDate,
+            modelTwo.PeriodEndDate,
+            modelTwo.GainAmountThree
         );
     }
 }

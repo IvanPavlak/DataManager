@@ -5,42 +5,42 @@ public class CombinedDataService
     public DateOnly Date { get; set; }
     public int ExitId { get; set; }
     public string ExitName { get; set; }
-    public double TotalDataModelOne { get; set; }
-    public double TotalDataModelTwo { get; set; }
+    public double TotalModelOne { get; set; }
+    public double TotalModelTwo { get; set; }
     public double Ratio { get; set; }
 
     public static List<CombinedDataService> FetchCombinedData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
-        var dataModelOneData = DataModelOneService.FetchDataModelOneData(context, dateFrom, dateTo, exitId).ToList();
-        var dataModelTwoData = DataModelTwoService.FetchDataModelTwoData(context, dateFrom, dateTo, exitId).ToList();
+        var modelOneData = ModelOneService.FetchModelOneData(context, dateFrom, dateTo, exitId).ToList();
+        var modelTwoData = ModelTwoService.FetchModelTwoData(context, dateFrom, dateTo, exitId).ToList();
         var exits = context.Exits.ToDictionary(e => e.Id, e => e.Name);
 
-        var dataModelTwoDict = dataModelTwoData
+        var modelTwoDict = modelTwoData
             .GroupBy(f => new { f.PeriodStartDate, f.ExitId })
             .ToDictionary(g => g.Key, g => g.First());
 
         var combinedData = new List<CombinedDataService>();
 
-        foreach (var dataModelOne in dataModelOneData)
+        foreach (var modelOne in modelOneData)
         {
-            var key = new { PeriodStartDate = dataModelOne.Date, dataModelOne.ExitId };
+            var key = new { PeriodStartDate = modelOne.Date, modelOne.ExitId };
 
-            if (dataModelTwoDict.TryGetValue(key, out var matchingDataModelTwo))
+            if (modelTwoDict.TryGetValue(key, out var matchingModelTwo))
             {
-                string exitName = exits.TryGetValue(dataModelOne.ExitId, out var name) ? name : "Unknown";
+                string exitName = exits.TryGetValue(modelOne.ExitId, out var name) ? name : "Unknown";
 
-                double totalDataModelOne = dataModelOne.Total;
-                double totalDataModelTwo = matchingDataModelTwo.GainAmountThree;
-                double ratio = totalDataModelTwo != 0 ? totalDataModelOne / totalDataModelTwo * 100 : 0;
+                double totalModelOne = modelOne.Total;
+                double totalModelTwo = matchingModelTwo.GainAmountThree;
+                double ratio = totalModelTwo != 0 ? totalModelOne / totalModelTwo * 100 : 0;
                 ratio = double.IsNaN(ratio) || double.IsInfinity(ratio) ? 0 : ratio;
 
                 var combinedItem = new CombinedDataService
                 {
-                    Date = dataModelOne.Date,
-                    ExitId = dataModelOne.ExitId,
+                    Date = modelOne.Date,
+                    ExitId = modelOne.ExitId,
                     ExitName = exitName,
-                    TotalDataModelOne = totalDataModelOne,
-                    TotalDataModelTwo = totalDataModelTwo,
+                    TotalModelOne = totalModelOne,
+                    TotalModelTwo = totalModelTwo,
                     Ratio = ratio
                 };
 

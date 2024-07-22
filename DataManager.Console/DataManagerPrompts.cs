@@ -1,16 +1,17 @@
-using DataManager.Core;
-using DataManager.Core.Services;
 using Spectre.Console;
+using DataManager.Core;
 using System.Globalization;
+using DataManager.Core.Services;
 using static DataManager.Core.Services.DataManagerService;
 
 namespace DataManager.Console;
 
 public class DataManagerPrompts
 {
-
     public static void ConsoleAppStartPrompt(DataManagerService DataManagerService, string csvFilePath, string xlsxFilePath, DataManagerDbContext dbContext)
     {
+        EraseExistingDatabasePrompt(dbContext);
+
         var importChoice = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("[bold dodgerblue1]=> Do you want to import data?[/]")
@@ -21,9 +22,9 @@ public class DataManagerPrompts
         {
             AnsiConsole.MarkupLine("[bold green1]=> Importing data![/]");
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-            DataManagerService.ImportToDatabase(csvFilePath, DataType.dataModelOne);
+            DataManagerService.ImportToDatabase(csvFilePath, DataTypes.ModelOne);
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-            DataManagerService.ImportToDatabase(xlsxFilePath, DataType.dataModelTwo);
+            DataManagerService.ImportToDatabase(xlsxFilePath, DataTypes.ModelTwo);
             PrettifyConsole.Title("Database Overview", "Up");
             DataManagerService.DatabaseOverview();
             PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
@@ -39,6 +40,26 @@ public class DataManagerPrompts
         }
     }
 
+    public static void EraseExistingDatabasePrompt(DataManagerDbContext dbContext)
+    {
+        var importChoice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("[bold dodgerblue1]=> Do you want to erase the existing database?[/]")
+                .PageSize(3)
+                .AddChoices("[bold green1]Yes[/]", "[bold red]No[/]"));
+
+        if (importChoice == "[bold green1]Yes[/]")
+        {
+            AnsiConsole.MarkupLine($"[bold red]=> DELETED EXISTING DATABASE![/]");
+            PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
+            dbContext.Database.EnsureDeleted();
+        }
+        else
+        {
+            return;
+        }
+    }
+
     public static void FetchDataPrompt(DataManagerDbContext dbContext)
     {
         if (!dbContext.Database.CanConnect())
@@ -46,7 +67,7 @@ public class DataManagerPrompts
             return;
         }
 
-        if (!dbContext.DataModelOnes.Any() || !dbContext.DataModelTwos.Any() || !dbContext.Exits.Any())
+        if (!dbContext.ModelOnes.Any() || !dbContext.ModelTwos.Any() || !dbContext.Exits.Any())
         {
             return;
         }
@@ -57,21 +78,21 @@ public class DataManagerPrompts
                 new SelectionPrompt<string>()
                     .Title("[bold dodgerblue1]=> Do you want to fetch data?[/]")
                     .PageSize(4)
-                    .AddChoices("[bold green1]DataModelOne Data[/]",
-                                "[bold green1]DataModelTwo Data[/]",
+                    .AddChoices("[bold green1]ModelOne Data[/]",
+                                "[bold green1]ModelTwo Data[/]",
                                 "[bold green1]Combined Data[/]",
                                 "[bold red]Cancel[/]"));
 
             switch (choice)
             {
-                case "[bold green1]DataModelOne Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.dataModelOne);
+                case "[bold green1]ModelOne Data[/]":
+                    HandleUserInputAndProcessData(dbContext, DataTypes.ModelOne);
                     break;
-                case "[bold green1]DataModelTwo Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.dataModelTwo);
+                case "[bold green1]ModelTwo Data[/]":
+                    HandleUserInputAndProcessData(dbContext, DataTypes.ModelTwo);
                     break;
                 case "[bold green1]Combined Data[/]":
-                    HandleUserInputAndProcessData(dbContext, DataType.CombinedData);
+                    HandleUserInputAndProcessData(dbContext, DataTypes.CombinedData);
                     break;
                 default:
                     AnsiConsole.MarkupLine("[bold red]=> Data fetch canceled![/]");
@@ -94,25 +115,25 @@ public class DataManagerPrompts
         }
     }
 
-    private static void HandleUserInputAndProcessData(DataManagerDbContext dbContext, DataType dataType)
+    private static void HandleUserInputAndProcessData(DataManagerDbContext dbContext, DataTypes dataType)
     {
         var dateFrom = PromptForDate("dateFrom");
         var dateTo = PromptForDate("dateTo");
         int exitId = PromptForExit(dbContext);
 
-        if (dataType == DataType.dataModelOne)
+        if (dataType == DataTypes.ModelOne)
         {
-            DataManagerDisplayData.DisplayDataModelOneData(dbContext, dateFrom, dateTo, exitId);
-            ExportDataPrompt(DataModelOneService.FetchDataModelOneData(dbContext, dateFrom, dateTo, exitId));
+            DataManagerDisplay.DisplayModelOneData(dbContext, dateFrom, dateTo, exitId);
+            ExportDataPrompt(ModelOneService.FetchModelOneData(dbContext, dateFrom, dateTo, exitId));
         }
-        else if (dataType == DataType.dataModelTwo)
+        else if (dataType == DataTypes.ModelTwo)
         {
-            DataManagerDisplayData.DisplayDataModelTwoData(dbContext, dateFrom, dateTo, exitId);
-            ExportDataPrompt(DataModelTwoService.FetchDataModelTwoData(dbContext, dateFrom, dateTo, exitId));
+            DataManagerDisplay.DisplayModelTwoData(dbContext, dateFrom, dateTo, exitId);
+            ExportDataPrompt(ModelTwoService.FetchModelTwoData(dbContext, dateFrom, dateTo, exitId));
         }
-        else if (dataType == DataType.CombinedData)
+        else if (dataType == DataTypes.CombinedData)
         {
-            DataManagerDisplayData.DisplayCombinedData(dbContext, dateFrom, dateTo, exitId);
+            DataManagerDisplay.DisplayCombinedData(dbContext, dateFrom, dateTo, exitId);
             ExportDataPrompt(CombinedDataService.FetchCombinedData(dbContext, dateFrom, dateTo, exitId));
         }
     }
@@ -190,6 +211,8 @@ public class DataManagerPrompts
 
     public static void ExportDataPrompt<T>(List<T> data)
     {
+        PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
+
         var exportChoice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("[bold dodgerblue1]=> Do you want to export this data?[/]")

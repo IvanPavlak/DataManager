@@ -1,37 +1,37 @@
 using System.Diagnostics;
-using DataManager.Core.DBModels;
-using DataManager.WebApi.Authorization;
 using DataManager.WebApi.DTOs;
+using DataManager.Core.DBModels;
 using DataManager.WebApi.Repositories;
+using DataManager.WebApi.Authorization;
 
 namespace DataManager.WebApi.Endpoints;
 
-public static class DataModelOnesEndpoints
+public static class ModelOnesEndpoints
 {
-    const string GetDataModelOneV1EndpointName = "GetDataModelOne";
+    const string GetModelOneV1EndpointName = "GetModelOne";
 
-    public static RouteGroupBuilder MapDataModelOnesEndpoints(this IEndpointRouteBuilder routes)
+    public static RouteGroupBuilder MapModelOnesEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.NewVersionedApi()
-                          .MapGroup("/dataModelOnes")
+                          .MapGroup("/ModelOnes")
                           .HasApiVersion(1.0);
 
         group.MapGet("/", async (
-            IDataModelOnesRepository repository,
+            IModelOnesRepository repository,
             ILoggerFactory loggerFactory,
-            [AsParameters] GetDataModelOneDto request,
+            [AsParameters] GetModelOneDto request,
             HttpContext http) =>
             {
-                var totalCount = await repository.CountDataModelOneAsync(request.Filter);
+                var totalCount = await repository.CountModelOneAsync(request.Filter);
                 http.Response.AddPaginationHeader(totalCount, request.PageSize);
 
-                var logger = loggerFactory.CreateLogger("DataModelOnes Endpoints");
+                var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
                 try
                 {
-                    var dataModelOnes = await repository.GetAllDataModelOnesAsync(request.PageNumber, request.PageSize, request.Filter);
-                    logger.LogInformation("Retrieved all dataModelOnes successfully.");
-                    return Results.Ok(dataModelOnes.Select(dataModelOne => dataModelOne.AsDtoV1()));
+                    var ModelOnes = await repository.GetAllModelOnesAsync(request.PageNumber, request.PageSize, request.Filter);
+                    logger.LogInformation("Retrieved all ModelOnes successfully.");
+                    return Results.Ok(ModelOnes.Select(ModelOne => ModelOne.AsDtoV1()));
                 }
                 catch (Exception ex)
                 {
@@ -52,21 +52,21 @@ public static class DataModelOnesEndpoints
             .RequireAuthorization(Policies.ReadAccess)
             .MapToApiVersion(1.0);
 
-        group.MapGet("/{id}", async (IDataModelOnesRepository repository, ILoggerFactory loggerFactory, int id) =>
+        group.MapGet("/{id}", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, int id) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelOnes Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var dataModelOne = await repository.GetDataModelOneAsync(id);
-                if (dataModelOne is not null)
+                var ModelOne = await repository.GetModelOneAsync(id);
+                if (ModelOne is not null)
                 {
-                    logger.LogInformation("Retrieved DataModelOne with ID {Id} successfully.", id);
-                    return Results.Ok(dataModelOne.AsDtoV1());
+                    logger.LogInformation("Retrieved ModelOne with ID {Id} successfully.", id);
+                    return Results.Ok(ModelOne.AsDtoV1());
                 }
                 else
                 {
-                    logger.LogWarning("DataModelOne with ID {Id} not found.", id);
+                    logger.LogWarning("ModelOne with ID {Id} not found.", id);
                     return Results.NotFound();
                 }
             }
@@ -86,33 +86,33 @@ public static class DataModelOnesEndpoints
                 );
             }
         })
-        .WithName(GetDataModelOneV1EndpointName)
+        .WithName(GetModelOneV1EndpointName)
         .RequireAuthorization(Policies.ReadAccess)
         .MapToApiVersion(1.0); ;
 
-        group.MapPost("/", async (IDataModelOnesRepository repository, ILoggerFactory loggerFactory, CreateDataModelOneDto dataModelOneDto) =>
+        group.MapPost("/", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, CreateModelOneDto ModelOneDto) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelOnes Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var dataModelOne = new DataModelOne
+                var modelOne = new ModelOne
                 {
-                    ExitId = dataModelOneDto.ExitId,
-                    Port = dataModelOneDto.Port,
-                    UserGroup = dataModelOneDto.UserGroup,
-                    Country = dataModelOneDto.Country,
-                    MemberId = dataModelOneDto.MemberId,
-                    Date = dataModelOneDto.Date,
-                    GainAmountOne = dataModelOneDto.GainAmountOne,
-                    GainAmountTwo = dataModelOneDto.GainAmountTwo,
-                    Loss = dataModelOneDto.Loss,
-                    Total = dataModelOneDto.Total
+                    ExitId = ModelOneDto.ExitId,
+                    Port = ModelOneDto.Port,
+                    UserGroup = ModelOneDto.UserGroup,
+                    Country = ModelOneDto.Country,
+                    MemberId = ModelOneDto.MemberId,
+                    Date = ModelOneDto.Date,
+                    GainAmountOne = ModelOneDto.GainAmountOne,
+                    GainAmountTwo = ModelOneDto.GainAmountTwo,
+                    Loss = ModelOneDto.Loss,
+                    Total = ModelOneDto.Total
                 };
 
-                await repository.CreateDataModelOneAsync(dataModelOne);
-                logger.LogInformation("Created a new dataModelOne with ID {Id} successfully.", dataModelOne.Id);
-                return Results.CreatedAtRoute(GetDataModelOneV1EndpointName, new { id = dataModelOne.Id }, dataModelOne);
+                await repository.CreateModelOneAsync(modelOne);
+                logger.LogInformation("Created a new ModelOne with ID {Id} successfully.", modelOne.Id);
+                return Results.CreatedAtRoute(GetModelOneV1EndpointName, new { id = modelOne.Id }, modelOne);
             }
             catch (Exception ex)
             {
@@ -133,32 +133,32 @@ public static class DataModelOnesEndpoints
         .RequireAuthorization(Policies.WriteAccess)
         .MapToApiVersion(1.0); ;
 
-        group.MapPut("/{id}", async (IDataModelOnesRepository repository, ILoggerFactory loggerFactory, int id, UpdateDataModelOneDto updatedDataModelOneDto) =>
+        group.MapPut("/{id}", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, int id, UpdateModelOneDto updatedModelOneDto) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelOnes Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var existingDataModelOne = await repository.GetDataModelOneAsync(id);
+                var existingModelOne = await repository.GetModelOneAsync(id);
 
-                if (existingDataModelOne is null)
+                if (existingModelOne is null)
                 {
-                    logger.LogWarning("DataModelOne with ID {Id} not found.", id);
+                    logger.LogWarning("ModelOne with ID {Id} not found.", id);
                     return Results.NotFound();
                 }
 
-                existingDataModelOne.Port = updatedDataModelOneDto.Port;
-                existingDataModelOne.UserGroup = updatedDataModelOneDto.UserGroup;
-                existingDataModelOne.Country = updatedDataModelOneDto.Country;
-                existingDataModelOne.MemberId = updatedDataModelOneDto.MemberId;
-                existingDataModelOne.Date = updatedDataModelOneDto.Date;
-                existingDataModelOne.GainAmountOne = updatedDataModelOneDto.GainAmountOne;
-                existingDataModelOne.GainAmountTwo = updatedDataModelOneDto.GainAmountTwo;
-                existingDataModelOne.Loss = updatedDataModelOneDto.Loss;
-                existingDataModelOne.Total = updatedDataModelOneDto.Total;
+                existingModelOne.Port = updatedModelOneDto.Port;
+                existingModelOne.UserGroup = updatedModelOneDto.UserGroup;
+                existingModelOne.Country = updatedModelOneDto.Country;
+                existingModelOne.MemberId = updatedModelOneDto.MemberId;
+                existingModelOne.Date = updatedModelOneDto.Date;
+                existingModelOne.GainAmountOne = updatedModelOneDto.GainAmountOne;
+                existingModelOne.GainAmountTwo = updatedModelOneDto.GainAmountTwo;
+                existingModelOne.Loss = updatedModelOneDto.Loss;
+                existingModelOne.Total = updatedModelOneDto.Total;
 
-                await repository.UpdateDataModelOneAsync(existingDataModelOne);
-                logger.LogInformation("Updated DataModelOne with ID {Id} successfully.", id);
+                await repository.UpdateModelOneAsync(existingModelOne);
+                logger.LogInformation("Updated ModelOne with ID {Id} successfully.", id);
 
                 return Results.NoContent();
             }
@@ -181,22 +181,22 @@ public static class DataModelOnesEndpoints
         .RequireAuthorization(Policies.WriteAccess)
         .MapToApiVersion(1.0); ;
 
-        group.MapDelete("/{id}", async (IDataModelOnesRepository repository, ILoggerFactory loggerFactory, int id) =>
+        group.MapDelete("/{id}", async (IModelOnesRepository repository, ILoggerFactory loggerFactory, int id) =>
         {
-            var logger = loggerFactory.CreateLogger("DataModelOnes Endpoints");
+            var logger = loggerFactory.CreateLogger("ModelOnes Endpoints");
 
             try
             {
-                var dataModelOne = await repository.GetDataModelOneAsync(id);
+                var ModelOne = await repository.GetModelOneAsync(id);
 
-                if (dataModelOne is not null)
+                if (ModelOne is not null)
                 {
-                    await repository.DeleteDataModelOneAsync(id);
-                    logger.LogInformation("Deleted DataModelOne with ID {Id} successfully.", id);
+                    await repository.DeleteModelOneAsync(id);
+                    logger.LogInformation("Deleted ModelOne with ID {Id} successfully.", id);
                 }
                 else
                 {
-                    logger.LogWarning("DataModelOne with ID {Id} not found.", id);
+                    logger.LogWarning("ModelOne with ID {Id} not found.", id);
                 }
 
                 return Results.NoContent();

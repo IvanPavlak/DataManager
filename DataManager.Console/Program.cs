@@ -1,20 +1,15 @@
-﻿using DataManager.Console;
-using DataManager.Core;
+﻿using DataManager.Core;
+using DataManager.Console;
 using DataManager.Core.Services;
-using Spectre.Console;
 
 using (var dbContext = new DataManagerDbContext())
 {
     var dataManagerService = new DataManagerService(dbContext);
 
-    PrettifyConsole.Title("DataManagerDB");
+    PrettifyConsole.Title("DataManager");
 
-    AnsiConsole.MarkupLine($"[bold red]-> DELETING EXISTING DATABASE! FOR TESTING ONLY! <-[/]");
-    dbContext.Database.EnsureDeleted();
-    PrettifyConsole.CreateAndDisplayLine("dodgerblue1");
-
-    string csvFilePath = Path.Combine("E:/VSCode/GitHub/Data_Manager/DataManager.Core/Database/Data/DataModelOne_1k_rows.csv");
-    string xlsxFilePath = Path.Combine("E:/VSCode/GitHub/Data_Manager/DataManager.Core/Database/Data/DataModelTwo_1k_rows.xlsx");
+    string csvFilePath = Path.Combine("E:/VSCode/GitHub/Data_Manager/DataManager.Core/Database/Data/ModelOne_100k_rows.csv");
+    string xlsxFilePath = Path.Combine("E:/VSCode/GitHub/Data_Manager/DataManager.Core/Database/Data/ModelTwo_100k_rows.xlsx");
 
     DataManagerPrompts.ConsoleAppStartPrompt(dataManagerService, csvFilePath, xlsxFilePath, dbContext);
 }

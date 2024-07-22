@@ -1,12 +1,12 @@
-using DataManager.WebApi.Data;
-using DataManager.WebApi.Authorization;
-using DataManager.WebApi.OpenAPI;
-using DataManager.WebApi.Middleware;
-using DataManager.WebApi.Endpoints;
 using DataManager.Core;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using DataManager.WebApi.Data;
+using DataManager.WebApi.OpenAPI;
 using Microsoft.Extensions.Options;
+using DataManager.WebApi.Endpoints;
 using Microsoft.EntityFrameworkCore;
+using DataManager.WebApi.Middleware;
+using DataManager.WebApi.Authorization;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +37,8 @@ app.UseMiddleware<RequestTimingMiddleware>();
 await app.Services.InitializeDbAsync();
 
 app.UseHttpLogging();
-app.MapDataModelOnesEndpoints();
-app.MapDataModelTwosEndpoints();
+app.MapModelOnesEndpoints();
+app.MapModelTwosEndpoints();
 
 app.UseDataManagerSwagger();
 

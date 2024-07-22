@@ -1,11 +1,11 @@
-using DataManager.Core.DBModels;
 using FluentValidation;
+using DataManager.Core.DBModels;
 
 namespace DataManager.Core.DbValidation;
 
-public class DataModelOneValidator : AbstractValidator<DataModelOne>
+public class ModelOneValidator : AbstractValidator<ModelOne>
 {
-    public DataModelOneValidator()
+    public ModelOneValidator()
     {
         RuleFor(d => d.Exit)
             .NotEmpty();

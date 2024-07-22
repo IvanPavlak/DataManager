@@ -1,6 +1,6 @@
 using DataManager.Core;
-using DataManager.WebApi.Repositories;
 using Microsoft.EntityFrameworkCore;
+using DataManager.WebApi.Repositories;
 
 namespace DataManager.WebApi.Data;
 
@@ -25,8 +25,8 @@ public static class DataExtensions
     {
         var connectionString = configuration.GetConnectionString("ConnectionString");
         services.AddNpgsql<DataManagerDbContext>(connectionString)
-                .AddScoped<IDataModelOnesRepository, EntityFrameworkRepository>()
-                .AddScoped<IDataModelTwosRepository, EntityFrameworkRepository>();
+                .AddScoped<IModelOnesRepository, EntityFrameworkRepository>()
+                .AddScoped<IModelTwosRepository, EntityFrameworkRepository>();
 
         return services;
     }

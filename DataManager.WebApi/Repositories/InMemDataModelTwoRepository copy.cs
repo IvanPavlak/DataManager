@@ -2,7 +2,7 @@ using DataManager.Core.DBModels;
 
 namespace DataManager.WebApi.Repositories;
 
-public class InMemDataModelTwosRepository : IDataModelTwosRepository
+public class InMemModelTwosRepository : IModelTwosRepository
 {
     static List<Exit> exits =
     [
@@ -11,7 +11,7 @@ public class InMemDataModelTwosRepository : IDataModelTwosRepository
         new() { Id = 3, Name = "Exit3" }
     ];
 
-    List<DataModelTwo> DataModelTwos =
+    List<ModelTwo> modelTwos =
     [
         new() {
             Id = 1,
@@ -39,44 +39,44 @@ public class InMemDataModelTwosRepository : IDataModelTwosRepository
         }
     ];
 
-    public async Task<IEnumerable<DataModelTwo>> GetAllDataModelTwosAsync(int PageNumber, int PageSize, string Filter)
+    public async Task<IEnumerable<ModelTwo>> GetAllModelTwosAsync(int PageNumber, int PageSize, string Filter)
     {
         var skipCount = (PageNumber - 1) * PageSize;
 
-        return await Task.FromResult(DataModelTwos.Skip(skipCount).Take(PageSize));
+        return await Task.FromResult(modelTwos.Skip(skipCount).Take(PageSize));
     }
 
-    public async Task<DataModelTwo> GetDataModelTwoAsync(int id)
+    public async Task<ModelTwo> GetModelTwoAsync(int id)
     {
-        return await Task.FromResult(DataModelTwos.Find(DataModelTwo => DataModelTwo.Id == id));
+        return await Task.FromResult(modelTwos.Find(ModelTwo => ModelTwo.Id == id));
     }
 
-    public async Task CreateDataModelTwoAsync(DataModelTwo DataModelTwo)
+    public async Task CreateModelTwoAsync(ModelTwo ModelTwo)
     {
-        DataModelTwo.Id = DataModelTwos.Max(DataModelTwo => DataModelTwo.Id) + 1;
-        DataModelTwos.Add(DataModelTwo);
+        ModelTwo.Id = modelTwos.Max(ModelTwo => ModelTwo.Id) + 1;
+        modelTwos.Add(ModelTwo);
 
         await Task.CompletedTask;
     }
 
-    public async Task UpdateDataModelTwoAsync(DataModelTwo updatedDataModelTwo)
+    public async Task UpdateModelTwoAsync(ModelTwo updatedModelTwo)
     {
-        var index = DataModelTwos.FindIndex(DataModelTwo => DataModelTwo.Id == updatedDataModelTwo.Id);
-        DataModelTwos[index] = updatedDataModelTwo;
+        var index = modelTwos.FindIndex(ModelTwo => ModelTwo.Id == updatedModelTwo.Id);
+        modelTwos[index] = updatedModelTwo;
 
         await Task.CompletedTask;
     }
 
-    public async Task DeleteDataModelTwoAsync(int id)
+    public async Task DeleteModelTwoAsync(int id)
     {
-        var index = DataModelTwos.FindIndex(DataModelTwo => DataModelTwo.Id == id);
-        DataModelTwos.RemoveAt(index);
+        var index = modelTwos.FindIndex(ModelTwo => ModelTwo.Id == id);
+        modelTwos.RemoveAt(index);
 
         await Task.CompletedTask;
     }
 
-    public async Task<int> CountDataModelTwoAsync()
+    public async Task<int> CountModelTwoAsync()
     {
-        return await Task.FromResult(DataModelTwos.Count());
+        return await Task.FromResult(modelTwos.Count());
     }
 }

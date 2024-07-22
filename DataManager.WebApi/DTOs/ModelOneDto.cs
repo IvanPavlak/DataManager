@@ -1,12 +1,12 @@
 namespace DataManager.WebApi.DTOs;
 
-public record GetDataModelOneDto(
+public record GetModelOneDto(
     int PageNumber = 1,
     int PageSize = 1,
     string Filter = null
 );
 
-public record GetDataModelOneDtoV1(
+public record GetModelOneDtoV1(
     int ExitId,
     string Port,
     string UserGroup,
@@ -19,7 +19,7 @@ public record GetDataModelOneDtoV1(
     int Total
 );
 
-public record CreateDataModelOneDto(
+public record CreateModelOneDto(
     int ExitId,
     string Port,
     string UserGroup,
@@ -32,7 +32,7 @@ public record CreateDataModelOneDto(
     int Total
 );
 
-public record UpdateDataModelOneDto(
+public record UpdateModelOneDto(
     string Port,
     string UserGroup,
     string Country,

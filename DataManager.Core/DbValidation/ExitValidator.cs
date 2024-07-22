@@ -1,5 +1,5 @@
-using DataManager.Core.DBModels;
 using FluentValidation;
+using DataManager.Core.DBModels;
 
 namespace DataManager.Core.DbValidation
 {

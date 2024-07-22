@@ -1,20 +1,20 @@
 ﻿using CsvHelper;
 using Spectre.Console;
+using FluentValidation;
 using System.Globalization;
 using CsvHelper.Configuration;
 using DataManager.Core.DBModels;
 using DataManager.Core.DbValidation;
-using FluentValidation;
 
 namespace DataManager.Core.Services;
 
-public class DataModelOneService
+public class ModelOneService
 {
-    public static List<DataModelOne> ParseCsv(string filePath)
+    public static List<ModelOne> ParseCsv(string filePath)
     {
         AnsiConsole.MarkupLine($"[bold dodgerblue1]Parsing data from:[/] [bold red]{Path.GetFileName(filePath)}[/]");
 
-        List<DataModelOne> dataModelOneList = [];
+        List<ModelOne> modelOneList = [];
         int parsedRows = 0;
 
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -33,7 +33,7 @@ public class DataModelOneService
 
                 while (csv.Read())
                 {
-                    DataModelOne dataModelOneData = new()
+                    ModelOne modelOneData = new()
                     {
                         Exit = new Exit { Name = csv.GetField<string>("Exit") },
                         Port = csv.GetField<string>("Port"),
@@ -47,7 +47,7 @@ public class DataModelOneService
                         Total = csv.GetField<int>("Total Amount")
                     };
 
-                    dataModelOneList.Add(dataModelOneData);
+                    modelOneList.Add(modelOneData);
                     parsedRows++;
                 }
 
@@ -56,59 +56,59 @@ public class DataModelOneService
             catch (Exception ex)
             {
                 Console.WriteLine($"Error processing: {ex.Message}");
-                dataModelOneList.Clear();
-                return dataModelOneList;
+                modelOneList.Clear();
+                return modelOneList;
             }
         }
-        return dataModelOneList;
+        return modelOneList;
     }
 
-    public static void ImportDataModelOnes(DataManagerDbContext dbContext, List<DataModelOne> dataModelOnes, Dictionary<string, Exit> exitByName)
+    public static void ImportModelOnes(DataManagerDbContext dbContext, List<ModelOne> modelOnes, Dictionary<string, Exit> exitByName)
     {
-        var dataModelOneValidator = new DataModelOneValidator();
+        var modelOneValidator = new ModelOneValidator();
 
-        foreach (var dataModelOne in dataModelOnes)
+        foreach (var modelOne in modelOnes)
         {
-            var validationResult = dataModelOneValidator.Validate(dataModelOne);
+            var validationResult = modelOneValidator.Validate(modelOne);
             if (!validationResult.IsValid)
             {
                 foreach (var error in validationResult.Errors)
                 {
-                    AnsiConsole.MarkupLine($"[bold red]=> Validation error for DataModelOne: {error.ErrorMessage}[/]");
+                    AnsiConsole.MarkupLine($"[bold red]=> Validation error for ModelOne: {error.ErrorMessage}[/]");
                 }
                 continue;
             }
 
-            dataModelOne.Exit = exitByName[dataModelOne.Exit.Name];
-            dbContext.DataModelOnes.Add(dataModelOne);
+            modelOne.Exit = exitByName[modelOne.Exit.Name];
+            dbContext.ModelOnes.Add(modelOne);
         }
     }
 
-    public static List<DataModelOne> FetchDataModelOneData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
+    public static List<ModelOne> FetchModelOneData(DataManagerDbContext context, DateOnly dateFrom, DateOnly dateTo, int exitId)
     {
-        IQueryable<DataModelOne> dataModelOneQuery = context.DataModelOnes.Where(a => a.Date >= dateFrom);
+        IQueryable<ModelOne> modelOneQuery = context.ModelOnes.Where(a => a.Date >= dateFrom);
 
         if (dateTo != default)
         {
-            dataModelOneQuery = dataModelOneQuery.Where(a => a.Date <= dateTo);
+            modelOneQuery = modelOneQuery.Where(a => a.Date <= dateTo);
         }
 
         if (exitId != default)
         {
-            dataModelOneQuery = dataModelOneQuery.Where(a => a.ExitId == exitId);
+            modelOneQuery = modelOneQuery.Where(a => a.ExitId == exitId);
         }
 
-        List<DataModelOne> dataModelOnes;
+        List<ModelOne> modelOnes;
 
         if (exitId == default)
         {
-            dataModelOnes = [.. dataModelOneQuery.OrderBy(a => a.Date)];
+            modelOnes = [.. modelOneQuery.OrderBy(a => a.Date)];
         }
         else
         {
-            dataModelOnes = [.. dataModelOneQuery.OrderBy(a => a.ExitId).ThenBy(a => a.Date)];
+            modelOnes = [.. modelOneQuery.OrderBy(a => a.ExitId).ThenBy(a => a.Date)];
         }
 
-        return dataModelOnes;
+        return modelOnes;
     }
 }

@@ -1,5 +1,5 @@
-using DataManager.Core;
 using Spectre.Console;
+using DataManager.Core;
 
 namespace DataManager.Console;
 
@@ -95,7 +95,6 @@ public class PrettifyConsole
                 else if (choice == "e")
                 {
                     AnsiConsole.MarkupLine($"\n[bold red]=> Exiting![/]");
-                    CreateAndDisplayLine("dodgerblue1");
                     exitLoop = true;
                 }
             }
