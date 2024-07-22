@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\DataManager.Core\DataManager.Core.csproj" />
@@ -22,6 +22,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>249077db-4e94-47eb-9951-d15ce52a2bc8</UserSecretsId>
   </PropertyGroup>
 
 </Project>
