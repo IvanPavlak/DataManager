@@ -1,10 +1,10 @@
 ﻿using CsvHelper;
 using Spectre.Console;
+using FluentValidation;
 using System.Globalization;
 using CsvHelper.Configuration;
 using DataManager.Core.DBModels;
 using DataManager.Core.DbValidation;
-using FluentValidation;
 
 namespace DataManager.Core.Services;
 

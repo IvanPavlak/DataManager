@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using DataManager.Core.DBModels;
-using DataManager.WebApi.Authorization;
 using DataManager.WebApi.DTOs;
+using DataManager.Core.DBModels;
 using DataManager.WebApi.Repositories;
+using DataManager.WebApi.Authorization;
 
 namespace DataManager.WebApi.Endpoints;
 

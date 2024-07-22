@@ -1,7 +1,7 @@
-using DataManager.Core;
-using DataManager.Core.Services;
 using Spectre.Console;
+using DataManager.Core;
 using System.Globalization;
+using DataManager.Core.Services;
 using static DataManager.Core.Services.DataManagerService;
 
 namespace DataManager.Console;

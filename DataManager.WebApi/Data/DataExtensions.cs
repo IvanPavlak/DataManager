@@ -1,6 +1,6 @@
 using DataManager.Core;
-using DataManager.WebApi.Repositories;
 using Microsoft.EntityFrameworkCore;
+using DataManager.WebApi.Repositories;
 
 namespace DataManager.WebApi.Data;
 

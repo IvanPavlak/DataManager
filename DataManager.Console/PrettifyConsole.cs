@@ -1,5 +1,5 @@
-using DataManager.Core;
 using Spectre.Console;
+using DataManager.Core;
 
 namespace DataManager.Console;
 

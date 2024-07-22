@@ -1,7 +1,7 @@
+using Moq;
 using DataManager.Core;
 using DataManager.Core.Services;
 using DataManager.Core.DBModels;
-using Moq;
 
 namespace DataManager.Test;
 

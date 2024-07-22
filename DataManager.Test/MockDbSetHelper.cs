@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Moq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataManager.Test;
 
