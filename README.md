@@ -17,7 +17,13 @@ These were designed to help me achieve several key objectives:
 
 ## Limitations
 
-No limitations were imposed on how the tasks should be solved, except for the requirement to use free software. It was clearly stated that the tasks are intended to serve as a guide rather than a strict requirement, allowing for multiple sensible approaches to their completion. There were also no limitations on the tools, IDEs, code editors, NuGet packages or any other tools needed to get the job done. 
+The project needed to be completed with the following:
+
+- Programming Language: C#
+- Framework: Entity Framework
+- Database: PostgreSQL
+
+No limitations were imposed on how the tasks should be solved, except for the requirement to use free software. It was clearly stated that the tasks were intended to serve as a guide rather than a strict requirement, allowing for multiple sensible approaches to their completion. There were also no restrictions on the tools, IDEs, code editors, NuGet packages, or any other tools needed to get the job done.
 ___
 # Pitches
 
@@ -26,7 +32,19 @@ ___
 
 ## Backend Pitch
 
+### Introduction
+-
+### Tasks Overview
+-
+### Tasks Breakdown
+-
 ___
 ## Web API Pitch
 
+### Introduction
+-
+### Tasks Overview
+-
+### Tasks Breakdown
+-
 ___
