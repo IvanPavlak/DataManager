@@ -19,9 +19,9 @@ These were designed to help me achieve several key objectives:
 
 The project needed to be completed with the following:
 
-- Programming Language: C#
-- Framework: Entity Framework
-- Database: PostgreSQL
+- Programming Language: [C#](https://dotnet.microsoft.com/en-us/languages/csharp)
+- Framework: [Entity Framework](https://learn.microsoft.com/en-us/ef/)
+- Database: [PostgreSQL](https://www.postgresql.org/)
 
 No limitations were imposed on how the tasks should be solved, except for the requirement to use free software. It was clearly stated that the tasks were intended to serve as a guide rather than a strict requirement, allowing for multiple sensible approaches to their completion. There were also no restrictions on the tools, IDEs, code editors, NuGet packages, or any other tools needed to get the job done.
 ___
