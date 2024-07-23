@@ -28,7 +28,7 @@ ___
 # Pitches
 
 > [!IMPORTANT]
-> The project was refactored to use general names, models, and data. Generic terms such as "ModelOne" and "Gain Amount One" are used to avoid revealing any proprietary information. For this exact reason, data is generated using a [Python script](https://github.com/IvanPavlak/Data_Manager/blob/e334610f720c6bb6e9999b82ad9b9a48345bb313/DataManager.Core/Database/Data/generate_data.ipynb), and all the code has been refactored to operate with this generated data. Despite this refactoring, the data still closely mirrors the challenges I encountered and resolved to meet the project requirements 
+> The project was refactored to use general names, models, and data. Generic terms such as `ModelOne` and `Gain Amount One` are used to avoid revealing any proprietary information. For this exact reason, data is generated using a [Python script](https://github.com/IvanPavlak/Data_Manager/blob/e334610f720c6bb6e9999b82ad9b9a48345bb313/DataManager.Core/Database/Data/generate_data.ipynb), and all the code has been refactored to operate with this generated data. Despite this refactoring, the data still closely mirrors the challenges I encountered and resolved to meet the project requirements 
 
 ## Backend Pitch
 
