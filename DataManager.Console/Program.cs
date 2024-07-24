@@ -1,6 +1,7 @@
 ﻿using DataManager.Core;
 using DataManager.Console;
 using DataManager.Core.Services;
+using DataManager.Core.Database.Data;
 
 using (var dbContext = new DataManagerDbContext())
 {
@@ -8,8 +9,7 @@ using (var dbContext = new DataManagerDbContext())
 
     PrettifyConsole.Title("DataManager");
 
-    string csvFilePath = Path.Combine("E:/VSCode/GitHub/Data_Manager/DataManager.Core/Database/Data/ModelOne_100k_rows.csv");
-    string xlsxFilePath = Path.Combine("E:/VSCode/GitHub/Data_Manager/DataManager.Core/Database/Data/ModelTwo_100k_rows.xlsx");
+    var (csvFilePath, xlsxFilePath) = FileLocator.GetFilePaths();
 
     DataManagerPrompts.ConsoleAppStartPrompt(dataManagerService, csvFilePath, xlsxFilePath, dbContext);
 }
