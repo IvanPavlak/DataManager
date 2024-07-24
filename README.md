@@ -166,3 +166,6 @@ When implementing the API, use `Swagger` (configured by default when creating a 
 
 After implementing all functionalities, add user authentication - prohibit API calls from unauthorized users. For practice purposes, there is no need to create a user in the database; it is sufficient to hardcode the username and password and then check them when verifying credentials. Use `JWT` as the authentication method.
 ___
+> [!NOTE]
+> DataManager v1.0.0 is the state of the project as done initially through the learning process during the onboarding. This release marks the beginning of my journey as a backend web developer, as it was my first encounter with C#, OOP principles, and web development. In the future, I plan to improve, optimize, and further experiment with this project.
+___
