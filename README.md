@@ -7,12 +7,10 @@ ___
 - [Backend Pitch](#backend-pitch)
 	- [Goal](#goal)
  	- [Requirements](#requirements)
-  		- [Parsing Input Files and Storing them into a Database](#parsing-input-files-and-storing-them-into-a-database)
-    		- [ModelOne (CSV)](#modelone-(csv))
-      		- [ModelTwo (XLSX)](#modeltwo-(xlsx))
-        	- [Data Retrieval by Filter](#data-retrieval-by-filter)
-         	- [Display and Export Retrieved Data](#display-and-export-retrieved-data)
-          	- [Test](#test)
+		- [Parsing Input Files and Storing them into a Database](#parsing-input-files-and-storing-them-into-a-database)
+		- [Data Retrieval by Filter](#data-retrieval-by-filter)
+		- [Display and Export Retrieved Data](#display-and-export-retrieved-data)
+		- [Test](#test)
 - [Web API Pitch](#web-api-pitch)
 	- [Goal](#goal)
  	- [Requirements](#requirements)  	 
@@ -70,7 +68,7 @@ ___
 
 #### Parsing Input Files and Storing them into a Database
 
-##### ModelOne (CSV)
+##### 1. `ModelOne` - `CSV`
 
 Research the appropriate NuGet packages for reading and writing `CSV` files and choose the most suitable one (most commonly used, most popular, regularly maintained, best documentation, etc.).
 
@@ -89,9 +87,9 @@ Input data:
 - `Loss Amount`
 - `Total Amount`
 
-##### ModelTwo (XLSX)
+##### 2. `ModelTwo` - `XLSX`
 
-Same as `ModelOne` but for `XLSX` files.
+Same as 1) but for `XLSX` files.
 
 Input data: 
 
