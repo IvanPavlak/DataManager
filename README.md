@@ -8,8 +8,8 @@ ___
 	- [Goal](#goal)
  	- [Requirements](#requirements)
   		- [Parsing Input Files and Storing them into a Database](#parsing-input-files-and-storing-them-into-a-database)
-    		- [1. ModelOne - CSV](#1.-modelone---csv)
-      		- [2. ModelTwo - XLSX](#2.-modeltwo---xlsx)
+    		- [1. ModelOne (CSV)](#1.-modelone-(csv))
+      		- [2. ModelTwo (XLSX)](#2.-modeltwo-(xlsx))
         	- [Data Retrieval by Filter](#data-retrieval-by-filter)
          	- [Display and Export Retrieved Data](#display-and-export-retrieved-data)
           	- [Test](#test)
@@ -70,7 +70,7 @@ ___
 
 #### Parsing Input Files and Storing them into a Database
 
-##### 1. `ModelOne` - `CSV`
+##### 1. ModelOne (CSV)
 
 Research the appropriate NuGet packages for reading and writing `CSV` files and choose the most suitable one (most commonly used, most popular, regularly maintained, best documentation, etc.).
 
@@ -89,7 +89,7 @@ Input data:
 - `Loss Amount`
 - `Total Amount`
 
-##### 2. `ModelTwo` - `XLSX`
+##### 2. ModelTwo (XLSX)
 
 Same as 1) but for `XLSX` files.
 
