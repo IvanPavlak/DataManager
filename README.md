@@ -1,3 +1,22 @@
+___
+[DataManager Project Overview](#datamanager-project-overview)
+- [Goal](#goal)
+- [Limitations](#limitations)
+
+[Pitches](#pitches)
+- [Backend Pitch](#backend-pitch)
+	- [Goal](#goal)
+ 	- [Requirements](#requirements)
+  		- [Parsing Input Files and Storing them into a Database](#parsing-input-files-and-storing-them-into-a-database)
+    		- [1. ModelOne - CSV](#1.-modelone---csv)
+      		- [2. ModelTwo - XLSX](#2.-modeltwo---xlsx)
+        	- [Data Retrieval by Filter](#data-retrieval-by-filter)
+         	- [Display and Export Retrieved Data](#display-and-export-retrieved-data)
+          	- [Test](#test)
+- [Web API Pitch](#web-api-pitch)
+	- [Goal](#goal)
+ 	- [Requirements](#requirements)  	 
+___
 # DataManager Project Overview
 
 ## Goal
