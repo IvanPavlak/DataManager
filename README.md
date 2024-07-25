@@ -5,15 +5,15 @@ ___
 
 [Pitches](#pitches)
 - [Backend Pitch](#backend-pitch)
-	- [Goal](#goal)
- 	- [Requirements](#requirements)
+	- [Backend Goals](#backend-goals)
+ 	- [Backend Requirements](#backend-requirements)
 		- [Parsing Input Files and Storing them into a Database](#parsing-input-files-and-storing-them-into-a-database)
 		- [Data Retrieval by Filter](#data-retrieval-by-filter)
 		- [Display and Export Retrieved Data](#display-and-export-retrieved-data)
 		- [Test](#test)
 - [Web API Pitch](#web-api-pitch)
-	- [Goal](#goal)
- 	- [Requirements](#requirements)  	 
+	- [Web API Goals](#web-api-goals)
+ 	- [Web API Requirements](#web-api-requirements)  	 
 ___
 # DataManager Project Overview
 
@@ -50,7 +50,7 @@ ___
 ___
 ## Backend Pitch
 
-### Goal
+### Backend Goals
 
 The goal of this task is to familiarize yourself with most of the basic functionalities and layers of the web application through a specific complex problem (focusing solely on logic, without creating a user interface). Approach the problem analytically, understand its domain, and choose a technical solution for each part of the problem.
 
@@ -64,7 +64,7 @@ The isolated functionalities to be implemented include:
 - Combining and calculating data from both files 
 - Writing tests
 ___
-### Requirements
+### Backend Requirements
 
 #### Parsing Input Files and Storing them into a Database
 
@@ -153,10 +153,11 @@ Create a few simple scenarios for testing:
 ___
 ## Web API Pitch
 
-### Goal
+### Web API Goals
 
 After implementing all the necessary functionalities in the console application, it is required to enable them through a Web API as well. Therefore, each retrieval or saving operation must be performable via a call to the Web API.
-### Requirements
+
+### Web API Requirements
 
 It will be necessary to implement all `GET` methods for data retrieval with configured pagination and filtering and create appropriate DTOs for request and response according to the needs.
 
